@@ -1,0 +1,107 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="副本 User.master.cs" Inherits="User" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>教育技术与传播学院 ———— 艺术与技术的融合，智慧与汗水的结晶</title>
+    <link rel="stylesheet" media="screen,projection" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" media="screen,projection" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" media="screen,projection" type="text/css" href="css/2col.css" title="2col" />
+    <link rel="alternate stylesheet" media="screen,projection" type="text/css" href="css/1col.css" title="1col" />
+    <!--[if lte IE 6]><link rel="stylesheet" media="screen,projection" type="text/css" href="css/main-ie6.css" /><![endif]-->
+    <link rel="stylesheet" media="screen,projection" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" media="screen,projection" type="text/css" href="css/mystyle.css" />
+    <script type="text/javascript" src="css/jquery.js"></script>
+    <script type="text/javascript" src="css/switcher.js"></script>    
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
+    <div id="main">
+  <!-- Tray -->
+  <div id="tray" class="box">
+    <p class="f-left box">
+      <!-- Switcher -->
+      <span class="f-left" id="switcher"> <a href="javascript:void(0);" rel="1col" class="styleswitch ico-col1" title="Display one column"><img src="images/users/switcher-1col.gif" alt="1 Column" /></a> <a href="javascript:void(0)" rel="2col" class="styleswitch ico-col2" title="Display two columns"><img src="images/users/switcher-2col.gif" alt="" /></a> </span> 
+      <strong><a href="Index.aspx" target="_blank">学院首页</a> | <a href="User_Center.aspx">后台管理</a></strong> </p>
+    <p class="f-right"><strong>用户：<%= Session["UserName"] %>&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; 权限：<%= Session["RoleName"] %></strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong><a href="Logout.aspx" id="logout">安全退出</a></strong></p>
+  </div>
+  <!--  /tray -->
+  <hr class="noscreen" />
+  <!-- /header -->
+  <hr class="noscreen" />
+  <!-- Columns -->
+  <div id="cols" class="box">
+    <!-- Aside (Left Column) -->
+    <div id="aside" class="box">
+      <div class="padding box">
+        <!-- Logo (Max. width = 200px) -->
+        <p id="logo"><a href="#">
+        <asp:Image ID="AvatarImage" runat="server" alt="" width="200" height="200"/>
+        </a>
+        </p>
+        <p><a href="User_Avatar.aspx">更换头像</a></p>
+
+        
+        <!-- Create a new project -->
+        <p id="btn_create" class="box" runat="server"><a href="Article_Add.aspx"><span>发表新文章</span></a></p>
+      </div>
+      <!-- /padding -->
+      <ul class="box">
+        <li><a href="#">用户模块</a>
+            <ul>
+                <li><a href="User_Center.aspx">使用帮助和说明</a></li>
+                <li><a href="User_Avatar.aspx">更换用户头像</a></li>
+                <li><a href="User_Edit.aspx?ID=<%= Session["UserID"] %>">更新个人信息</a></li>
+                <li><a href='User_Profile.aspx?ID=<%= Session["UserID"] %>' target="_blank">设计用户首页</a></li>
+                <li><a href="User_Password.aspx">更换用户密码</a></li>                          
+            </ul>
+        </li>        
+        <li runat="server" id="LiArticles"><a href="#">文章模块</a>
+            <ul>
+                <li><a href="Article_Man.aspx">文章管理</a></li>
+                <li><a href="Article_Add.aspx">发表新文章</a></li>
+                <li><a href="Focus_Man.aspx">焦点图管理</a></li>
+                <li><a href="Article_Undone.aspx">草稿箱</a></li>                
+            </ul>
+        </li>
+        <li runat="server" id="LiUsers"><a href="#">管理模块</a>
+            <ul>
+                <li><a href="User_Man.aspx">用户管理</a></li>
+            </ul>
+        </li>
+        <li><a href="#">作品模块</a>
+            <ul>
+                <li><a href="Show_Man.aspx">作品管理</a></li>
+                <li><a href="Show_Add.aspx">上传新作品</a></li>
+            </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- /aside -->
+    <hr class="noscreen" />
+    <!-- Content (Right Column) -->
+    <div id="content" class="box">
+    <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+    </asp:ContentPlaceHolder>  
+    </div>
+    <!-- /content -->
+  </div>
+  <!-- /cols -->
+  <hr class="noscreen" />
+  <!-- Footer -->
+  <div id="footer" class="box">
+    <p class="f-left">&copy; 2013 <a href="http://www.gdin.edu.cn">广东技术师范学院</a> | <a href="Index.aspx">教育技术与传播学院</a> &reg;</p>
+    <p class="f-right">技术支持 <a href="#" title="技术支持">Justin</a></p>
+  </div>
+  <!-- /footer -->
+</div>
+    </form>
+</body>
+</html>

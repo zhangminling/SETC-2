@@ -1,0 +1,13 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" CodeFile="Master2Col.master.cs" Inherits="Master2Col" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <div id="SideBar" class="FloatLeft">
+        <asp:ContentPlaceHolder ID="ContentPlaceHolderSideBar" runat="server"></asp:ContentPlaceHolder>
+    </div>
+    <div id="MainContent" class="FloatRight">
+        <asp:ContentPlaceHolder ID="ContentPlaceHolderMainContent" runat="server"></asp:ContentPlaceHolder>
+    </div>
+</asp:Content>
+
