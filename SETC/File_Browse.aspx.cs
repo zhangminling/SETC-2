@@ -153,7 +153,7 @@ public partial class File_Browse : System.Web.UI.Page
             FN.Text = fileName;
             FP.Text = filePath;
 
-            InsertDataBase();
+            //InsertDataBase();
 
 
             //将上传好的图片在页面中显示出来
@@ -182,10 +182,11 @@ public partial class File_Browse : System.Web.UI.Page
         using (SqlConnection conn = new DB().GetConnection())
         {            
             //向resources插入一条记录操作
-            StringBuilder sb = new StringBuilder("Insert into Resources (ResourceName,FileName,FilePath,FileSizeInKB,FileType,Extentsion,FolderID,FolderName,UserID,CDT,Status)");
-            sb.Append(" values(@ResourceName,@FileName,@FilePath,@FileSize,@FileType,@Extentsion,@FolderID,@FolderName,@UserID,@CDT,@Status)");
+            StringBuilder sb = new StringBuilder("Insert into Resources (ResourceName,FileName,FilePath,FileSizeInKB,FileType,Extentsion,FolderID,FolderName,UserID,CDT,Status,UserName)");
+            sb.Append(" values(@ResourceName,@FileName,@FilePath,@FileSize,@FileType,@Extentsion,@FolderID,@FolderName,@UserID,@CDT,@Status,@UserName)");
             SqlCommand cmd = new SqlCommand(sb.ToString(), conn);            
-            cmd.Parameters.AddWithValue("@ResourceName", TextBox1.Text);
+            //cmd.Parameters.AddWithValue("@ResourceName", TextBox1.Text);
+            cmd.Parameters.AddWithValue("@ResourceName", TextBox1.Text.Trim());
             cmd.Parameters.AddWithValue("@FileName", FN.Text);
             cmd.Parameters.AddWithValue("@FilePath", FP.Text);
             cmd.Parameters.AddWithValue("@FileSize", FS.Text);
@@ -194,6 +195,7 @@ public partial class File_Browse : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@FolderID", 0);
             cmd.Parameters.AddWithValue("@FolderName", "");
             cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
+            cmd.Parameters.AddWithValue("@UserName", Session["UserName"].ToString());
             cmd.Parameters.AddWithValue("@CDT", DateTime.Now);
             cmd.Parameters.AddWithValue("@Status", 0);
             conn.Open();
@@ -203,6 +205,33 @@ public partial class File_Browse : System.Web.UI.Page
             result = true;
         }
         return result;
+    }
+
+    protected void Insert_Click(object sender, EventArgs e)
+    {
+        using (SqlConnection conn = new DB().GetConnection())
+        {
+            //向resources插入一条记录操作
+            StringBuilder sb = new StringBuilder("Insert into Resources (ResourceName,FileName,FilePath,FileSizeInKB,FileType,Extentsion,FolderID,FolderName,UserID,CDT,Status,UserName)");
+            sb.Append(" values(@ResourceName,@FileName,@FilePath,@FileSize,@FileType,@Extentsion,@FolderID,@FolderName,@UserID,@CDT,@Status,@UserName)");
+            SqlCommand cmd = new SqlCommand(sb.ToString(), conn);
+            //cmd.Parameters.AddWithValue("@ResourceName", TextBox1.Text);
+            cmd.Parameters.AddWithValue("@ResourceName", TextBox1.Text.Trim());
+            cmd.Parameters.AddWithValue("@FileName", FN.Text);
+            cmd.Parameters.AddWithValue("@FilePath", FP.Text);
+            cmd.Parameters.AddWithValue("@FileSize", FS.Text);
+            cmd.Parameters.AddWithValue("@FileType", ResourceTypeLabel.Text);
+            cmd.Parameters.AddWithValue("@Extentsion", FET.Text);
+            cmd.Parameters.AddWithValue("@FolderID", 0);
+            cmd.Parameters.AddWithValue("@FolderName", "");
+            cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
+            cmd.Parameters.AddWithValue("@UserName", Session["UserName"].ToString());
+            cmd.Parameters.AddWithValue("@CDT", DateTime.Now);
+            cmd.Parameters.AddWithValue("@Status", 0);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
     }
     
 }

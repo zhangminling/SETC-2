@@ -131,9 +131,9 @@
             DataNavigateUrlFormatString="Article_View.aspx?ID={0}&T={1}" DataTextField="Title" 
             HeaderText="标题"  ItemStyle-HorizontalAlign="Left"  >
         </asp:HyperLinkField> 
-        <asp:BoundField DataField="Author" HeaderText="作者" ItemStyle-Width="60" Visible="false" />        
+        <asp:BoundField DataField="Author" HeaderText="作者" ItemStyle-Width="60" Visible="True" />        
         <asp:BoundField DataField="CDT" HeaderText="创建日期" DataFormatString="{0:yyyy-MM-dd}" ItemStyle-Width="80" ItemStyle-HorizontalAlign="Left"  />
-        <asp:BoundField DataField="ViewTimes" DataFormatString="{0}"  HeaderText="浏览" ItemStyle-Width="30" Visible="false" />                        
+        <asp:BoundField DataField="ViewTimes" DataFormatString="{0}"  HeaderText="浏览" ItemStyle-Width="30" Visible="True" />                        
     </Columns>
     </asp:GridView>
     <br />

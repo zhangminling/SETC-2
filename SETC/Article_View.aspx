@@ -92,7 +92,7 @@
         <asp:Label ID="ArticleTitle" runat="server" Text="Label" Font-Bold="true" Font-Size="16"></asp:Label>&nbsp;&nbsp;&nbsp;&nbsp;
     </td></tr>
     <tr><td align="center"><br />
-        作者：<asp:Label ID="Author" runat="server" Text="Label"></asp:Label>&nbsp;|&nbsp;
+        作者：<asp:Label ID="TagName" runat="server" Text="Label"></asp:Label>--<asp:Label ID="Author" runat="server" Text="Label"></asp:Label>&nbsp;|&nbsp;
    日期：<asp:Label ID="CDT" runat="server" Text="Label"></asp:Label>&nbsp;|&nbsp;
    浏览次数：<asp:Label ID="ViewTimes" runat="server" Text="Label"></asp:Label>&nbsp;&nbsp;<asp:Label ID="ReviewTimes" runat="server" Text="Label" Visible="false" ></asp:Label>
     </td></tr>  

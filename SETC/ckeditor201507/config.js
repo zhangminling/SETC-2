@@ -4,8 +4,10 @@
  */
 
 CKEDITOR.editorConfig = function(config) {
+    //config.enterMode = CKEDITOR.ENTER_BR;
     /* 添加新的插件 */
-    config.extraPlugins = 'timestamp';
+    config.extraPlugins = 'timestamp,folder';
+    config.allowedContent = true;
     
     /* 配置工具条 */
     config.toolbar = [
@@ -21,6 +23,6 @@ CKEDITOR.editorConfig = function(config) {
 		'/',
 		{ name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
 		{ name: 'colors', items: ['TextColor', 'BGColor'] },
-		{ name: 'tools', items: ['Maximize', 'ShowBlocks', 'Timestamp','-', 'Source'] }
+		{ name: 'tools', items: ['Maximize', 'ShowBlocks', 'Timestamp','Folder', '-', 'Source'] }
     ];
 };

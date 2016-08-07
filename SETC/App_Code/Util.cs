@@ -195,4 +195,29 @@ public class Util
     {
         //System.Web.HttpContext.Current.
     }
+
+    //更新母版头像和用户完善页头像
+    public static int UpdateAvatar(string username)
+    {
+        int roleID = -1;
+        using (SqlConnection conn = new DB().GetConnection())
+        {
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "select * from [Users] where [UserName] = @UserName ";
+            cmd.Parameters.AddWithValue("@UserName", username);
+            conn.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+
+                System.Web.HttpContext.Current.Session["Avatar"] = rd["Avatar"].ToString();
+
+
+            }
+            cmd.Dispose();
+            rd.Close();
+        }
+
+        return roleID;
+    }
 }

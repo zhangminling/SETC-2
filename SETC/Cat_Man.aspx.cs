@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
-using System.Text;
+
 
 public partial class Cat_Man : System.Web.UI.Page
 {
@@ -13,37 +11,21 @@ public partial class Cat_Man : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            CatName.Focus();
+
             if (!String.IsNullOrEmpty(Request["ID"]))
             {
                 using (SqlConnection conn = new DB().GetConnection())
                 {
                     SqlCommand cmd = conn.CreateCommand();
-                    string sql = "select * from cats order by valid desc,Orders desc;select * from Cats where ID = @ID";
+                    string sql = "select * from Cats order by valid desc,Orders desc;select * from Cats where ID = @ID";
                     cmd.CommandText = sql;
-                    cmd.Parameters.AddWithValue("@ID",Convert.ToInt16(Request["ID"]));
+                    cmd.Parameters.AddWithValue("@ID", Convert.ToInt16(Request["ID"]));
                     conn.Open();
                     SqlDataReader rd = cmd.ExecuteReader();
                     GridView1.DataSource = rd;
                     GridView1.DataBind();
                     rd.NextResult();
-                    if (rd.Read())
-                    {
-                        ID_TextBox.Text = rd["ID"].ToString();
-                        CatName.Text = rd["CatName"].ToString();
-                        Orders.Text = rd["Orders"].ToString();
-                        Subs.Text = rd["Subs"].ToString();
-                        Description.Text = rd["Description"].ToString();
-                        int i = Convert.ToInt16(rd["Valid"]);
-                        if (i == 1)
-                        {
-                            Valid.SelectedIndex = 0;
-                        }
-                        else
-                        {
-                            Valid.SelectedIndex = 1;
-                        }
-                    }
+
                     rd.Close();
                     conn.Close();
                 }
@@ -52,16 +34,15 @@ public partial class Cat_Man : System.Web.UI.Page
             {
                 MyDataBind();
             }
-            
+
         }
     }
-
     protected void MyDataBind()
     {
         using (SqlConnection conn = new DB().GetConnection())
         {
             SqlCommand cmd = conn.CreateCommand();
-            string sql = "select * from cats order by valid desc,Orders desc;";
+            string sql = "select * from Cats order by valid desc,Orders desc;";
             cmd.CommandText = sql;
             conn.Open();
             SqlDataReader rd = cmd.ExecuteReader();
@@ -71,9 +52,53 @@ public partial class Cat_Man : System.Web.UI.Page
             conn.Close();
         }
     }
-
+    protected void ButtonDel_Click(object sender, EventArgs e)
+    {
+        string ids = "";
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("ChechBox1");
+            if (checkBox.Checked == true)
+            {
+                ids += "," + GridView1.DataKeys[i].Value;
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            ids = ids.Substring(1);
+            Response.Redirect(Server.HtmlEncode("Cat_Del.aspx?IDS=" + ids));
+        }
+    }
+    protected void Button4_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Sub_Add.aspx");
+    }
     protected void Button1_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Cat_Man.aspx");
+        Response.Redirect("Cat_Add.aspx");
+    }
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        string ids = "";
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("ChechBox1");
+            if (checkBox.Checked == true)
+            {
+                ids = GridView1.DataKeys[i].Value.ToString();
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            Response.Redirect(Server.HtmlEncode("Cat_Edi.aspx?ID=" + ids));
+        }
+    }
+    protected void Button3_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Cat_Add.aspx");
     }
 }
+
+
+
+

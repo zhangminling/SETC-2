@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-<div id="CurrentPosition">当前位置：<a href="#">文章模块</a> >> <a href="#">焦点图管理</a></div>
+<div id="CurrentPosition">当前位置：<a href="#">焦点图管理</a></div>
 <center><h1>焦点图管理</h1></center>
 <p>&nbsp;</p>
     <p>

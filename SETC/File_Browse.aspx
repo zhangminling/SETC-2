@@ -151,7 +151,7 @@
 
     <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 
-    <script type="text/javascript">
+    <%--<script type="text/javascript">
         $(document).ready(function() {
             // 文件夹
             $("#folders div").mouseover(function() {
@@ -178,7 +178,7 @@
 
             });
         });
-    </script>
+    </script>--%>
 
 </head>
 <body>
@@ -194,7 +194,7 @@
             <!-- Tab 2 -->
             <div id="tab2" class="tab_content">
                 <!-- <h2>Submit</h2>            -->
-                <p>从本地上传新资源到服务器</p>
+                <p>1、从本地上传新资源到服务器</p>
                 <p><small>合法的文件包括：音频、视频、图片、文档、压缩、Flash等，音频、视频、Flash、文档和压缩文件最大200M，图片最大20M。</small></p>
                 <div>
                     <asp:Label ID="FET" runat="server" Text="Label" Visible="false"></asp:Label>
@@ -205,7 +205,7 @@
                     <CuteWebUI:Uploader runat="server" ID="Uploader1" InsertText="上传资源到服务器" OnFileUploaded="Uploader_FileUploaded">
                     </CuteWebUI:Uploader>
                 </div>
-                <!--                    
+                                  
             <p>2、对资源重命名</p>
             <p><small>输入有意义的名字，方便日后对资源的查找和管理</small></p>
             <p id="IMG">
@@ -215,7 +215,7 @@
                 <asp:TextBox ID="TextBox1" runat="server" Width="280px"></asp:TextBox>&nbsp; 
                 </div>
             
-            <p>3、选择资源的类型</p>
+            <%--<p>3、选择资源的类型</p>
             <p><small>对于图片和视频资源，请选择他们对应的版本</small></p>
             <div>
                 <asp:RadioButtonList ID="RadioButtonList1" runat="server" 
@@ -223,13 +223,14 @@
                     <asp:ListItem Selected="True">电脑</asp:ListItem>
                     <asp:ListItem>手机</asp:ListItem>
                 </asp:RadioButtonList>
-            </div>
-            -->
+            </div>--%>
+            
                 
                 <p>
                     &nbsp;</p>
                 <div>
-                    <asp:Button ID="Insert" runat="server" Text="插入" />
+                    <asp:Button ID="Insert" runat="server" Text="插入" CssClass="Button" 
+                    onclick="Insert_Click"  />
                     &nbsp;&nbsp;<asp:Button ID="Abolish" runat="server" Text="取消" Visible="false" />
                 </div>
                 <p>

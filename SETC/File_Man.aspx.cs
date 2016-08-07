@@ -13,43 +13,65 @@ public partial class File_Man : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            using (SqlConnection conn = new DB().GetConnection())
+            if (Session["RoleID"] == null || Session["UserID"] == null)
             {
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "select distinct typename as typename from ResourceTypes";
-                conn.Open();
-                SqlDataReader rd = cmd.ExecuteReader();
-                ResourceTypeDDL.DataSource = rd;
-                ResourceTypeDDL.DataValueField = "typename";
-                ResourceTypeDDL.DataTextField = "typename";
-                ResourceTypeDDL.DataBind();
-                rd.Close();
-                ResourceTypeDDL.Items.Insert(0, new ListItem("所有资源类型", ""));
+                Util.ShowMessage("用户登录超时，请重新登录！", "Login.aspx");
+            }
+            else
+            {
+                MyInit();
+                MyDataBind();
+            }
 
-                // RoleID=1,2,3,4，分别对应Administrator,Editor,Contributor,Author
-                int RoleID = Convert.ToInt16(Session["RoleID"].ToString());
-                if (RoleID == 1 || RoleID == 2)
-                {
-                    // 只有Administrator和Editor才可以看到所有作者的文章
-                    AuthorDDL.Items.Clear();
-                    cmd.CommandText = "select * from Users order by ID desc";
-                    rd = cmd.ExecuteReader();
-                    AuthorDDL.DataSource = rd;
-                    AuthorDDL.DataValueField = "ID";
-                    AuthorDDL.DataTextField = "UserName";
-                    AuthorDDL.DataBind();
-                    rd.Close();
-                    AuthorDDL.Items.Insert(0, new ListItem("所有用户", "-1"));
-                }
-                else
-                {
+        }
+    }
+
+    private void MyInit()
+    {
+        
+        using (SqlConnection conn = new DB().GetConnection())
+        {
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "select distinct typename as typename from ResourceTypes";
+            conn.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+            ResourceTypeDDL.DataSource = rd;
+            ResourceTypeDDL.DataValueField = "typename";
+            ResourceTypeDDL.DataTextField = "typename";
+            ResourceTypeDDL.DataBind();
+            rd.Close();
+            ResourceTypeDDL.Items.Insert(0, new ListItem("所有资源类型", ""));
+
+            cmd.CommandText = "Select * from ResourceFolders where ParentFolderID = '0' order by ID asc";
+            rd = cmd.ExecuteReader();
+            FolderDDL.DataSource = rd;
+            FolderDDL.DataValueField = "ID";
+            FolderDDL.DataTextField = "FolderName";
+            FolderDDL.DataBind();
+            rd.Close();
+            FolderDDL.Items.Insert(0, new ListItem("所有文件夹", "-1"));
+
+            // RoleID=1,2,3,4，分别对应Administrator,Editor,Contributor,Author
+            int RoleID = Convert.ToInt16(Session["RoleID"].ToString());
+            if (RoleID == 1 || RoleID == 2)
+            {
+                // 只有Administrator和Editor才可以看到所有作者的文章
+                AuthorDDL.Items.Clear();
+                cmd.CommandText = "select * from Users order by ID desc";
+                rd = cmd.ExecuteReader();
+                AuthorDDL.DataSource = rd;
+                AuthorDDL.DataValueField = "ID";
+                AuthorDDL.DataTextField = "UserName";
+                AuthorDDL.DataBind();
+                rd.Close();
+                AuthorDDL.Items.Insert(0, new ListItem("所有用户", "-1"));
+            }
+            else
+            {
                     // Contributor和Author只能看到自己的文章
                     AuthorDDL.Items.Clear();
                     AuthorDDL.Items.Insert(0, new ListItem(Session["UserName"].ToString(), Session["UserID"].ToString()));
-                }
             }
-
-            MyDataBind();
         }
     }
 
@@ -57,7 +79,7 @@ public partial class File_Man : System.Web.UI.Page
     {
         AspNetPager1.PageSize = Convert.ToInt16(PageSizeDDL.SelectedValue);
         string param = SearchTB.Text;
-        StringBuilder whereStr = new StringBuilder(" where 1= 1 ");
+        StringBuilder whereStr = new StringBuilder(" where Valid=1 ");
         if (!String.IsNullOrEmpty(param))
         {
             whereStr.Append(" and [ResourceName] like '%").Append(Server.HtmlEncode(param.Trim().Replace("'", ""))).Append("%' ");
@@ -69,6 +91,10 @@ public partial class File_Man : System.Web.UI.Page
         if (Convert.ToInt16(AuthorDDL.SelectedValue) > 0)
         {
             whereStr.Append(" and UserID = ").Append(AuthorDDL.SelectedValue);
+        }
+        if (Convert.ToInt16(FolderDDL.SelectedValue) > 0)
+        {
+            whereStr.Append(" and FolderID = ").Append(FolderDDL.SelectedValue);
         }
 
         string sql = "select count(ID) as total from Resources " + whereStr.ToString();
@@ -106,6 +132,7 @@ public partial class File_Man : System.Web.UI.Page
             cmd.CommandText = sql;
             rd = cmd.ExecuteReader();
             GridView1.DataSource = rd;
+            GridView1.DataKeyNames = new string[] {"ID" };
             GridView1.DataBind();
             rd.Close();
         }
@@ -129,14 +156,72 @@ public partial class File_Man : System.Web.UI.Page
     }
     protected void UpdateBtn_Click(object sender, EventArgs e)
     {
-
+        string ids = "";
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("CheckBox1");
+            if (checkBox.Checked == true && GridView1.DataKeys.Count != 0 && GridView1.DataKeys[i].Value != null)
+            {
+                ids = GridView1.DataKeys[i].Value.ToString();
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            Response.Redirect(Server.HtmlEncode("File_Edit.aspx?ID=" + ids));
+        }
     }
     protected void DelBtn_Click(object sender, EventArgs e)
     {
-
+        string ids = "";
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("CheckBox1");
+            if (checkBox.Checked == true)
+            {
+                ids += "," + GridView1.DataKeys[i].Value;
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            ids = ids.Substring(1);
+            Response.Redirect(Server.HtmlEncode("File_Del2.aspx?IDS=" + ids));
+        }
+    }
+    protected void MoveBtn_Click(object sender, EventArgs e)
+    {
+        string ids = "";
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("CheckBox1");
+            if (checkBox.Checked == true)
+            {
+                ids += "," + GridView1.DataKeys[i].Value;
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            ids = ids.Substring(1);
+            Response.Redirect(Server.HtmlEncode("File_Move.aspx?IDS=" + ids));
+        }
+    }
+    protected void AddBtn_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Server.HtmlEncode("File_Upload.aspx"));
     }
     protected void SelectAllCheckBox_CheckedChanged(object sender, EventArgs e)
     {
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox cbox = (CheckBox)GridView1.Rows[i].FindControl("CheckBox1");
+            if (SelectAllCheckBox.Checked == true)
+            {
+                cbox.Checked = true;
+            }
+            else
+            {
+                cbox.Checked = false;
+            }
+        }
 
     }
     protected void PageSizeDDL_SelectedIndexChanged(object sender, EventArgs e)
@@ -144,6 +229,10 @@ public partial class File_Man : System.Web.UI.Page
         MyDataBind();
     }
     protected void AspNetPager1_PageChanged(object sender, EventArgs e)
+    {
+        MyDataBind();
+    }
+    protected void FolderDDL_SelectedIndexChanged(object sender, EventArgs e)
     {
         MyDataBind();
     }

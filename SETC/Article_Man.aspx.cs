@@ -7,6 +7,10 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Text;
 
+
+
+
+
 public partial class Article_Man : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -15,8 +19,12 @@ public partial class Article_Man : System.Web.UI.Page
         {
             MyInit();
             MyDataBind();
+
         }
+    
     }
+
+   
 
     private void MyInit()
     {
@@ -81,7 +89,7 @@ public partial class Article_Man : System.Web.UI.Page
     {
         AspNetPager1.PageSize = Convert.ToInt16(PageSizeDDL.SelectedValue);
         string param = SearchTB.Text;
-        StringBuilder whereStr = new StringBuilder(" where 1= 1 ");
+        StringBuilder whereStr = new StringBuilder(" where Valid = 1 and Finished = 1 ");
         if (!String.IsNullOrEmpty(param))
         {
             whereStr.Append(" and [title] like '%" ).Append(Server.HtmlEncode(param.Trim().Replace("'", ""))).Append("%' ");
@@ -138,6 +146,7 @@ public partial class Article_Man : System.Web.UI.Page
             rd.Close();
         }
     }
+
 
     protected void SelectAllCheckBox_CheckedChanged(object sender, EventArgs e)
     {
@@ -228,7 +237,12 @@ public partial class Article_Man : System.Web.UI.Page
     {
         MyDataBind();
     }
+    //禁用文章
+     protected void Forbidden_Click(object sender, EventArgs e)
+     {
+        
 
+      }
     protected void UpBtn_Click(object sender, EventArgs e)
     {
 
@@ -276,4 +290,5 @@ public partial class Article_Man : System.Web.UI.Page
     {
         MyDataBind();
     }
+   
 }

@@ -4,9 +4,11 @@
     <asp:Label ID="IDSLabel" runat="server" Text="" Visible="false"></asp:Label>
 <div id="CurrentPosition">当前位置：<a href="Article_Man.aspx">网站首页</a> >> <a href="#">删除文章</a>
 </div>
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+        <ContentTemplate>
 
 <p>&nbsp;</p>
-    <p>您确定要删除以下文章吗？一旦删除，将不可恢复！<asp:Button ID="Button1" runat="server" Text="确定删除" 
+    <p>您确定要删除以下文章吗？<asp:Button ID="Button1" runat="server" Text="确定删除" 
             CssClass="Button" onclick="Button1_Click" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
         <asp:Button ID="Button2" 
@@ -38,6 +40,7 @@
 </asp:GridView>
 <br />    
 </div>
+           </ContentTemplate></asp:UpdatePanel>
 </asp:Content>
 
 

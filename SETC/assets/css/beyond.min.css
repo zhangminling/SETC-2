@@ -11474,7 +11474,7 @@ span.input-icon {
             margin-top: 10px;
         }
 
-.checkbox {
+/*.checkbox {
     padding-left: 0;
 }
 
@@ -12265,7 +12265,7 @@ input[type=checkbox], input[type=radio] {
 
         input[type=checkbox].checkbox-slider.colored-maroon.toggle + .text:after {
             background-color: #981b48;
-        }
+        }*/
 
 .noUi-target, .noUi-target {
     -webkit-touch-callout: none;
@@ -15485,7 +15485,7 @@ div[data-role="editor-toolbar"] {
     .register-container .registerbox {
         position: relative;
         width: 350px !important;
-        height: 560px !important;
+        height: 380px !important;
         padding: 0;
         -webkit-box-shadow: 0 0 14px rgba(0,0,0,.1);
         -moz-box-shadow: 0 0 14px rgba(0,0,0,.1);
@@ -18505,3 +18505,103 @@ tr.fc-last td {
     .loading-container .colored {
         background-color: #2dc3e8 !important;
     }
+
+/*自己添加*/
+
+/*分页控件的css*/
+.pages {  color: #2dc3e8;text-align:center;}
+.pages a, .pages .cpb { text-decoration:none; padding: 4px 8px; border: 1px solid #ddd;background: #fff;margin:0 4px; font-size:12px; color:#000;}
+.pages a:hover { background-color: #2dc3e8; color:#fff;border:1px solid #2dc3e8; text-decoration:none;}
+.pages .cpb { font-weight: bold; color: #fff; background: #2dc3e8; border:1px solid #2dc3e8;}
+
+/* 列表控件GridView的CSS*/
+.GridViewStyle
+  {  
+      border: 2px solid white;
+      padding: 18px;
+      width:100%;
+      background-color:#fff;
+      font-size:13px;
+ }
+ 
+.GridViewHeaderStyle th
+{
+     border-left: 1px solid #EBE9ED;
+     border-right: 1px solid #EBE9ED;
+     text-align:center;
+}
+.GridViewHeaderStyle
+{
+     background-color: #2dc3e8;
+     font-weight: bold;
+     color: White;
+}
+.GridViewFooterStyle
+{
+     background-color: #5D7B9D;
+     font-weight: bold;
+     color: White;
+}
+.GridViewRowStyle
+{
+     background-color: #F7F6F3;
+     color: #333333;
+}
+.GridViewAlternatingRowStyle
+{
+     background-color: #FFFFFF;
+     color: #284775;
+}
+.GridViewRowStyle td, .GridViewAlternatingRowStyle
+{
+     border: 1px solid #EBE9ED;
+}
+.GridViewSelectedRowStyle
+{
+     background-color: #E2DED6;
+     font-weight: bold;
+     color: #333333;
+}
+
+.GridViewPagerStyle
+{
+     background-color:#5D7B9D;
+     color: #FFFFFF;
+}
+.GridViewPagerStyle table
+{
+     margin: 0 auto 0 auto;
+}
+li.gobackMain a
+{
+ color:Blue;
+}
+
+
+/*“每页显示”*/
+.Label1{
+    float:right;
+}
+
+/*家豪*/
+.Gridviewticket-item
+{
+
+     
+    padding-top:50px;
+    margin:0 50px;
+  
+
+}
+.GridViewHeaderStyle-item 
+{
+     background-color:#fb6e52;
+     font-weight: bold;
+     color: White;
+}
+.GridViewHeaderStyle-item  th
+{
+     border-left: 1px solid #EBE9ED;
+     border-right: 1px solid #EBE9ED;
+     text-align:center;
+}

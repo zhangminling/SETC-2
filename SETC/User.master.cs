@@ -18,7 +18,8 @@ public partial class User : System.Web.UI.MasterPage
             }
             else
             {
-                int roleID = Convert.ToInt16(Session["RoleID"].ToString());
+                string username = Convert.ToString(Session["UserName"]);
+                int roleID = Util.UpdateAvatar(username);
                 AvatarImage.ImageUrl = Session["Avatar"].ToString();
                 AvatarImage1.ImageUrl = Session["Avatar"].ToString(); 
               

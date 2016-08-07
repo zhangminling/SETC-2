@@ -46,6 +46,7 @@ public partial class Article_View : System.Web.UI.Page
                 CatID = rd["CatID"].ToString();
                 SubID = rd["SubID"].ToString();
                 SubName = rd["SubName"].ToString();
+                TagName.Text=rd["TagName"].ToString();
                 Author.Text = rd["Author"].ToString();
                 CDT.Text = String.Format("{0:yyyy-MM-dd}", rd["CDT"]);
                 ViewTimes.Text = rd["ViewTimes"].ToString();

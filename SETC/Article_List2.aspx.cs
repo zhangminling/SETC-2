@@ -27,7 +27,7 @@ public partial class Article_List2 : System.Web.UI.Page
                 using (SqlConnection conn = new DB().GetConnection())
                 {
                     SqlCommand cmd = conn.CreateCommand();
-                    cmd.CommandText = "select ID from Articles  where SubID = @SubID and Status = 1 and Finished = 1 ";
+                    cmd.CommandText = "select ID from Articles  where SubID = @SubID and Status = 1 and Finished = 1";
                     cmd.Parameters.AddWithValue("@SubID", ViewState["SubID"]);
                     conn.Open();
                     SqlDataReader rd = cmd.ExecuteReader();                    
@@ -107,7 +107,7 @@ public partial class Article_List2 : System.Web.UI.Page
     {
         AspNetPager1.PageSize = Convert.ToInt16(PageSizeDDL.SelectedValue);
 
-        string whereStr = " where SubID = @SubID and Status = 1 and Finished = 1 ";
+        string whereStr = " where SubID = @SubID and Status = 1 and Finished = 1";
         string sql = "select count(ID) as total from Articles " + whereStr;
 
         using (SqlConnection conn = (SqlConnection)new DB().GetConnection())
@@ -139,7 +139,7 @@ public partial class Article_List2 : System.Web.UI.Page
                 AspNetPager1.Visible = true;
             }
 
-            whereStr = " where SubID = @SubID2 and Status = 1 and Finished = 1 ";
+            whereStr = " where SubID = @SubID2 and Status = 1 and Finished = 1";
             if (AspNetPager1.CurrentPageIndex == 1)
             {
                 sql = "Select top " + AspNetPager1.PageSize + " * from Articles " + whereStr + " Order by Orders Desc,CDT Desc,ID Desc";

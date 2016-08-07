@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Text;
 
 public partial class Focus_Man : System.Web.UI.Page
 {
@@ -76,7 +77,8 @@ public partial class Focus_Man : System.Web.UI.Page
     {
         using (SqlConnection conn = new DB().GetConnection())
         {
-            string sql = "select * from focuses order by valid desc,orders desc,id desc";
+            StringBuilder whereStr = new StringBuilder(" where Valid=1 ");
+            string sql = "select * from focuses " + whereStr.ToString() + " order by valid desc,orders desc,id desc";
             SqlCommand cmd = new SqlCommand(sql, conn);
             conn.Open();
             SqlDataReader rd = cmd.ExecuteReader();

@@ -41,12 +41,12 @@ public partial class Article_Del : System.Web.UI.Page
         using (SqlConnection conn = new DB().GetConnection())
         {
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "Delete from Articles where ID in (" + IDSLabel.Text + ") ";
+            cmd.CommandText = "Update Articles set Valid=0 where ID in (" + IDSLabel.Text + ") ";
             conn.Open();
             i = cmd.ExecuteNonQuery();
             cmd.Dispose();
 
-            cmd.CommandText = "select * from Articles where ID in (" + IDSLabel.Text + ") order by ID desc";            
+            cmd.CommandText = "select * from Articles where  Valid=1 and ID in (" + IDSLabel.Text + ") order by ID desc";            
             SqlDataReader rd = cmd.ExecuteReader();
             GridView1.DataSource = rd;
             GridView1.DataBind();
@@ -56,7 +56,7 @@ public partial class Article_Del : System.Web.UI.Page
         }
         if (i > 0)
         {
-            ResultLabel.Text = "成功删除" + i + "篇文章！";
+            ResultLabel.Text = "成功删除" + i + "篇文章！       可在回收站中恢复！";
             ResultLabel.ForeColor = System.Drawing.Color.Green;
         }
         else

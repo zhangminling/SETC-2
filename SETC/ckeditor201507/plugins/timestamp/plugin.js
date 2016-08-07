@@ -13,13 +13,13 @@
         editor.addCommand('insertTimestamp', {
             exec: function showMyDialog(e) {
             var str = 'width=980,height=650,left=' + ((screen.width - 900) / 2) + ',top=' + ((screen.height - 650) / 2) + ',scrollbars=no,scrolling=no,location=no,toolbar=no'
-                var w = window.open('File_Browse.aspx', 'MyWindow', str);                
+                var w = window.open('File_Browse2.aspx', 'MyWindow', str);                
             }
         });
         
 
         editor.ui.addButton('Timestamp', {
-            label: 'Insert Image',
+            label: '上传资源',
             command: 'insertTimestamp',
             toolbar: 'insert'
         });
