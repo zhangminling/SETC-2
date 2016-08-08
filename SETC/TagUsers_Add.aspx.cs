@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Text;
 using System.IO;
 using System.Collections;
+using System.Data;
 
 public partial class TagUsers_Add : System.Web.UI.Page
 {
@@ -45,20 +46,7 @@ public partial class TagUsers_Add : System.Web.UI.Page
                 rd.Close();
             }
 
-            using (SqlConnection conn = new DB().GetConnection())
-            {
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "select distinct TagName as TagName from UserTags";
-                conn.Open();
-                SqlDataReader rd = cmd.ExecuteReader();
-                CatsDDL.DataSource = rd;
-                CatsDDL.DataValueField = "TagName";
-                CatsDDL.DataTextField = "TagName";
-                CatsDDL.DataBind();
-                rd.Close();
-                CatsDDL.Items.Insert(0, new ListItem("标签类型", ""));
-            }
-            MyDataBind();
+          //  MyDataBind();
             MyDataBind2();
             for (int i = 0; i <= TagsList.Items.Count - 1; i++)
             {
@@ -90,38 +78,54 @@ public partial class TagUsers_Add : System.Web.UI.Page
 
     private void MyDataBind() 
     {
+        string tags = "";
         AspNetPager1.PageSize = Convert.ToInt16(PageSizeDDL.SelectedValue);
         StringBuilder whereStr = new StringBuilder(" where 1= 1 ");
         for (int i = 0; i <= CheckBoxList1.Items.Count - 1; i++)
         {
             if (CheckBoxList1.Items[i].Selected == true)
             {
-                whereStr.Append(" and TagName = '").Append(CheckBoxList1.Items[i].Value).Append("'");
+                whereStr.Append(" and UserTagID = '").Append(CheckBoxList1.Items[i].Value).Append("'");
+                tags += "," + CheckBoxList1.Items[i].Value;
             }
-            string[] USERID = new string[3];
-            string sql = "select UserID from Users_UserTags" + whereStr.ToString();
-            using (SqlConnection conn = new DB().GetConnection())
+        }
+        tags = tags.Substring(1);
+         
+            string sql = "select UserID from Users_UserTags where UserTagID in ("+tags+") " ;
+            string sql2 = "SELECT count(UserID) from Users_UserTags where UserTagID in (" + tags + ")";
+           using (SqlConnection conn = new DB().GetConnection())
             {
                 SqlCommand cmd = conn.CreateCommand();
+                SqlCommand cmd2 = conn.CreateCommand();
                 cmd.CommandText = sql;
+                cmd2.CommandText = sql2;
                 conn.Open();
+                //sql = cmd.ExecuteScalar().ToString();
+             
+                //SqlDataReader rd2 = cmd2.ExecuteReader();
+               
+                int count = int.Parse(Convert.ToString(cmd2.ExecuteScalar()));
+                AspNetPager1.RecordCount = count;
+                string[] USERID = new string[count];
                 SqlDataReader rd = cmd.ExecuteReader();
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < count; j++)
                 {
                     if (rd.Read())
                     {
+                        
                         USERID[j] = rd["UserID"].ToString();
                     }
                 }
                 rd.Close();
 
-                string s = "";
-                for (int j = 0; j < 3; j++) 
+               string s = "";
+               for (int j = 0; j < count; j++) 
                 {
-                     s = string.Join(",", USERID);
+                    s = string.Join(",", USERID);
                 }
-                Label4.Text = USERID[0];
+              //  Label4.Text = USERID[0];
                 Label5.Text = s;
+                Label6.Text = tags;
             
 
 
@@ -129,7 +133,7 @@ public partial class TagUsers_Add : System.Web.UI.Page
                 {
                     sql = "Select top " + AspNetPager1.PageSize + " * from Users where ID in (" + Label5.Text + ") " + OrderDDL.SelectedValue;
                 }
-                else
+               else
                 {
                     // Select Top 页容量 * from 表 where 条件 and id not in	(Select Top 页容量*（当前页数-1） id 	from 表 where 条件 order by 排序条件) order by 排序条件
                     sql = "Select top " + AspNetPager1.PageSize + " * from Users " + whereStr.ToString() + " and id not in ( select top " + AspNetPager1.PageSize * (AspNetPager1.CurrentPageIndex - 1) + " id  from Users " + whereStr.ToString() + " " + OrderDDL.SelectedValue + " ) " + OrderDDL.SelectedValue;
@@ -146,7 +150,7 @@ public partial class TagUsers_Add : System.Web.UI.Page
                
 
             }
-        }
+        
        
        
     }
@@ -357,8 +361,8 @@ public partial class TagUsers_Add : System.Web.UI.Page
         MyDataBind2();
     }
 
-    protected void CatsDDL_SelectedIndexChanged(object sender, EventArgs e)
+    protected void TagBtn_Click(object sender, EventArgs e)
     {
-       MyDataBind();
+        MyDataBind();
     }
 }

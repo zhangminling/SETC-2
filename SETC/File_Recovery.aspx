@@ -12,13 +12,10 @@
 </p>
 
 <div id="GridViewDiv">
-    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" HeaderStyle-Height="24px" CssClass="GridViewStyle">
-        <FooterStyle CssClass="GridViewFooterStyle" />
-        <RowStyle CssClass="GridViewRowStyle" />  
-        <SelectedRowStyle CssClass="GridViewSelectedRowStyle" />
-        <PagerStyle CssClass="GridViewPagerStyle" />
-        <AlternatingRowStyle CssClass="GridViewAlternatingRowStyle" />
-        <HeaderStyle CssClass="GridViewHeaderStyle" />
+    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" HeaderStyle-Height="24px" class="table table-striped table-bordered table-hover"
+        GridLines="Horizontal"  style="text-align:center;" ForeColor="#333333" HeaderStyle-HorizontalAlign="Center" Width="99%">
+        <RowStyle BackColor="#F7F6F3" ForeColor="#333333" Height="30px" HorizontalAlign="Center" />
+        <HeaderStyle HorizontalAlign="Center" />
         <Columns>
             <asp:TemplateField HeaderText="序" HeaderStyle-HorizontalAlign="Center">
                 <ItemTemplate>

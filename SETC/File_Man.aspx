@@ -2,11 +2,6 @@
     CodeFile="File_Man.aspx.cs" Inherits="File_Man" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-<style type="text/css">
-#GridViewDiv table tr td{
-padding:4px 4px;
-}
-</style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div id="CurrentPosition">
@@ -18,7 +13,7 @@ padding:4px 4px;
             <div id="Man_Nav">
                 <asp:TextBox ID="SearchTB" runat="server" CssClass="TextBox"></asp:TextBox>
                 &nbsp;
-                <asp:Button ID="SearchBtn" runat="server" Text="搜索" CssClass="Button" OnClick="SearchBtn_Click" />&nbsp;&nbsp;
+                <asp:Button ID="SearchBtn" runat="server" Text="搜索" class="btn btn-default shiny" OnClick="SearchBtn_Click" />&nbsp;&nbsp;
                 <asp:DropDownList ID="AuthorDDL" runat="server" OnSelectedIndexChanged="AuthorDDL_SelectedIndexChanged"
                     AutoPostBack="True">
                 </asp:DropDownList>
@@ -39,10 +34,10 @@ padding:4px 4px;
                 &nbsp;</p>
             <div>
                 <asp:CheckBox ID="SelectAllCheckBox" runat="server" Text=" 全选 " AutoPostBack="true" OnCheckedChanged="SelectAllCheckBox_CheckedChanged" />&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="UpdateBtn" runat="server" Text="修改" CssClass="Button" OnClick="UpdateBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="MoveBtn" runat="server" Text="移动" CssClass="Button" OnClick="MoveBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="DelBtn" runat="server" Text="删除" CssClass="Button" OnClick="DelBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="AddBtn" runat="server" Text="上传资源" CssClass="Button" OnClick="AddBtn_Click" />
+                <asp:Button ID="UpdateBtn" runat="server" Text="修改" class="btn btn-default shiny" OnClick="UpdateBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:Button ID="MoveBtn" runat="server" Text="移动" class="btn btn-default shiny" OnClick="MoveBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:Button ID="DelBtn" runat="server" Text="删除" class="btn btn-default shiny" OnClick="DelBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:Button ID="AddBtn" runat="server" Text="上传资源" class="btn btn-default shiny" OnClick="AddBtn_Click" />
             </div>
             <p>&nbsp;</p>
             <div class="Label1">
@@ -62,13 +57,10 @@ padding:4px 4px;
             </div>
             <br />
             <div id="GridViewDiv">
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" HeaderStyle-Height="24px" CssClass="GridViewStyle">
-                <FooterStyle CssClass="GridViewFooterStyle" />
-                <RowStyle CssClass="GridViewRowStyle" />  
-                <SelectedRowStyle CssClass="GridViewSelectedRowStyle" />
-                <PagerStyle CssClass="GridViewPagerStyle" />
-                <AlternatingRowStyle CssClass="GridViewAlternatingRowStyle" />
-                <HeaderStyle CssClass="GridViewHeaderStyle" />
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" HeaderStyle-Height="24px" class="table table-striped table-bordered table-hover"
+                GridLines="Horizontal"  style="text-align:center;" ForeColor="#333333" HeaderStyle-HorizontalAlign="Center" Width="99%">
+                <RowStyle BackColor="#F7F6F3" ForeColor="#333333" Height="30px" HorizontalAlign="Center" />
+                <HeaderStyle HorizontalAlign="Center" />
                 <Columns>
                     <asp:TemplateField HeaderText="序" HeaderStyle-HorizontalAlign="Center">
                         <ItemTemplate>

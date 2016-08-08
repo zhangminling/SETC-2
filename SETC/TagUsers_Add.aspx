@@ -7,6 +7,7 @@
     <asp:Label ID="Label3" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="Label4" runat="server" Text=""></asp:Label>
     <asp:Label ID="Label5" runat="server" Text=""></asp:Label>
+    <asp:Label ID="Label6" runat="server" Text=""></asp:Label>
 
       <h5 class="row-title"><i class="typcn typcn-tag"></i>添加群组用户</h5>
 
@@ -75,12 +76,10 @@
         <asp:CheckBox ID="SelectAllCheckBox" runat="server" Text=" 全选 " AutoPostBack="true"  oncheckedchanged="SelectAllCheckBox_CheckedChanged"/>&nbsp;&nbsp;&nbsp;&nbsp;
        <asp:Button ID="UpdateBtn" runat="server" Text="修改" class="btn btn-blue active" onclick="UpdateBtn_Click"/>&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="DelBtn" runat="server" Text="删除" class="btn btn-darkorange active"   onclick="DelBtn_Click"/>&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:Button ID="AddBtn" runat="server" Text="确认添加" class="btn btn-success tooltip-success" OnClick="AddBtn_Click"  />
-                                        
+        <asp:Button ID="AddBtn" runat="server" Text="确认添加" class="btn btn-success tooltip-success" OnClick="AddBtn_Click"  />&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:Button ID="TagBtn" runat="server" Text="标签查询" class="btn btn-darkorange active"   onclick="TagBtn_Click"/>                                
        
-      <asp:DropDownList ID="CatsDDL" runat="server" 
-        onselectedindexchanged="CatsDDL_SelectedIndexChanged" AutoPostBack="True">
-    </asp:DropDownList>
+
       
               <div style="height:32px;line-height:32px; float:right;">角色分类：
          

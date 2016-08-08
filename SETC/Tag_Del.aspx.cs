@@ -6,24 +6,27 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 
-public partial class ArticleTag_Del : System.Web.UI.Page
+public partial class Tag_Delete : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if ( Request.QueryString["IDS"] != null )
+        if (!IsPostBack)
+        {
+            if (Request.QueryString["IDS"] != null)
             {
                 IDSLabel.Text = Request.QueryString["IDS"].ToString();
                 MyInit();
             }
         }
-    
+    }
+
 
     private void MyInit()
-    {        
+    {
         using (SqlConnection conn = new DB().GetConnection())
         {
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "select * from ArticleTags where ID in (" + IDSLabel.Text + ") order by ID desc";
+            cmd.CommandText = "select * from UserTags where ID in (" + IDSLabel.Text + ") order by ID desc";
             conn.Open();
             SqlDataReader rd = cmd.ExecuteReader();
             GridView1.DataSource = rd;
@@ -32,17 +35,22 @@ public partial class ArticleTag_Del : System.Web.UI.Page
             conn.Close();
         }
     }
-
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Tags_Man.aspx");
+    }
     protected void Button1_Click(object sender, EventArgs e)
     {
         int i = 0;
+
+        //string sql = "select UserID from Users_UserTags where UserTagID in (" + IDSLabel.Text + ") ";
+        //string sql2 = "SELECT count(UserID) from Users_UserTags where UserTagID in (" + IDSLabel.Text + ")";
         using (SqlConnection conn = new DB().GetConnection())
         {
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "Delete from ArticleTags where ID in (" + IDSLabel.Text + ") ";
+            cmd.CommandText = "Delete from UserTags where ID in (" + IDSLabel.Text + ") ";
             SqlCommand cmd1 = conn.CreateCommand();
-            cmd1.CommandText = "Delete from Articles_ArticleTags where ArticleTagID in (" + IDSLabel.Text + ") ";
-            
+            cmd1.CommandText = "Delete from Users_UserTags where UserTagID in (" + IDSLabel.Text + ") ";
 
             conn.Open();
             cmd1.ExecuteNonQuery();
@@ -50,13 +58,12 @@ public partial class ArticleTag_Del : System.Web.UI.Page
             cmd.Dispose();
             cmd1.Dispose();
 
-            cmd.CommandText = "select * from ArticleTags where ID in (" + IDSLabel.Text + ") order by ID desc";            
+            cmd.CommandText = "select * from  UserTags where ID in (" + IDSLabel.Text + ") order by ID desc";
             SqlDataReader rd = cmd.ExecuteReader();
             GridView1.DataSource = rd;
             GridView1.DataBind();
             rd.Close();
             conn.Close();
-
         }
         if (i > 0)
         {
@@ -68,9 +75,5 @@ public partial class ArticleTag_Del : System.Web.UI.Page
             ResultLabel.Text = "操作失败，请重试！";
             ResultLabel.ForeColor = System.Drawing.Color.Red;
         }
-    }
-    protected void Button2_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("ArticleTag_Man.aspx");
     }
 }

@@ -214,8 +214,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
-                                    <span class="menu-text">修改--查看标签</span>
+                                <a href="Tags_Man.aspx">
+                                    <span class="menu-text">标签管理</span>
                                 </a>
                             </li>
                             <li>
@@ -439,6 +439,9 @@
               
                 <!-- Page Header -->
                 <div class="page-header position-relative">
+                    <asp:Label ID="Label3" runat="server" Text="" Visible="false"></asp:Label>
+                    <asp:Label ID="Label5" runat="server" Text="" Visible="false"></asp:Label>
+                    <asp:Label ID="Label6" runat="server" Text="" Visible="false"></asp:Label>
                       <div id="CurrentPosition">当前位置：<a href="User_Man.aspx">角色管理</a></div>   
          
                     <!--Header Buttons-->
@@ -497,16 +500,19 @@
                                     <div class="widget-body bordered-top bordered-sky">
                                         
                                              
-                                       <div class="form-group">
+                                       <div class="form-group col-xs-11 col-md-11">
                                                         <span class="input-icon">
                                                             <asp:TextBox ID="SearchTB" runat="server" placeholder="查询用户名" class="form-control input-sm"></asp:TextBox>
                                                             <i class="glyphicon glyphicon-search danger circular"></i>
 
                                                         </span>
-
-
-                                           </div>
+                                     </div>
         <asp:Button ID="SearchBtn" runat="server" Text="搜索"  class="btn btn-sky" OnClick="SearchBtn_Click" />&nbsp;&nbsp;
+
+          <asp:CheckBoxList ID="CheckBoxList1" runat="server" style="margin-left:20px" RepeatDirection="Horizontal" 
+                                           RepeatLayout="Table" RepeatColumns="7" Width="950px">
+                                                    
+                                                   </asp:CheckBoxList>
 
         <asp:DropDownList ID="OrderDDL" runat="server" OnSelectedIndexChanged="OrderDDL_SelectedIndexChanged"
             AutoPostBack="True">
@@ -516,15 +522,22 @@
    
         &nbsp;&nbsp;&nbsp;&nbsp;
         <asp:CheckBox ID="SelectAllCheckBox" runat="server" Text=" 全选 " AutoPostBack="true"  oncheckedchanged="SelectAllCheckBox_CheckedChanged"/>&nbsp;&nbsp;&nbsp;&nbsp;
+         <asp:Button ID="IsTrue" runat="server" Text="启用" AutoPostBack="true"  class="btn btn-palegreen active"  OnClick="IsTrue_Click"/>&nbsp;&nbsp;&nbsp;&nbsp;
+       <asp:Button ID="IsFalse" runat="server" Text="禁用" AutoPostBack="true" class="btn btn-yellow active" OnClick="IsFalse_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="UpdateBtn" runat="server" Text="修改" class="btn btn-blue active" onclick="UpdateBtn_Click"/>&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="DelBtn" runat="server" Text="删除" class="btn btn-darkorange active" onclick="DelBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
+           <asp:Button ID="TagBtn" runat="server" Text="标签查询" class="btn btn-magenta active"    onclick="TagBtn_Click"/>   
    
-    
+     <div style="height:32px;line-height:32px; float:right;">状态：
+          <asp:DropDownList ID="IsValid" runat="server" AutoPostBack="True"  OnSelectedIndexChanged="IsValid_SelectedIndexChanged" >
+        </asp:DropDownList>
+</div>       
                                         
         <div style="height:32px;line-height:32px; float:right;">角色分类：
           <asp:DropDownList ID="RoleTypeDDL" runat="server" AutoPostBack="True" OnSelectedIndexChanged="RoleTypeDDL_SelectedIndexChanged">
         </asp:DropDownList>
-</div>       
+</div>   
+         
     <div id="margin">
       <asp:GridView ID="GridView1" Width="100%" runat="server" 
         AutoGenerateColumns="False"   class="table table-striped table-bordered table-hover" 

@@ -212,7 +212,7 @@ public partial class File_Browse1 : System.Web.UI.Page
                 if (ResourceTypeLabel.Text.Equals("视频") || ResourceTypeLabel.Text.Equals("音频"))
                 {
                 //  insertFileHTML = "<div id='mediaplayer' mediaURL='" + filePath + "'>Media Player</div>";
-                    insertFileHTML = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' height='480' width='640'><param name='movie' value='http://localhost:55433/ckeditor201507/plugins/jwplayer/jwplayer/player.swf' /><param name='allowfullscreen' value='true' /><param name='allowscriptaccess' value='always' /><param name='flashvars' value='file=http://localhost:55433/" + filePath + "&amp;autostart=false' /><embed allowfullscreen='true' allowscriptaccess='always' flashvars='file=http://localhost:55433/" + filePath + "&amp;autostart=false' height='480' id='player1' name='player1' src='http://localhost:55433/ckeditor201507/plugins/jwplayer/jwplayer/player.swf' width='640'></embed></object>";
+                    insertFileHTML = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' height='480' width='640'><param name='movie' value='/ckeditor201507/plugins/jwplayer/jwplayer/player.swf' /><param name='allowfullscreen' value='true' /><param name='allowscriptaccess' value='always' /><param name='flashvars' value='file=/" + filePath + "&amp;autostart=false' /><embed allowfullscreen='true' allowscriptaccess='always' flashvars='file=/" + filePath + "&amp;autostart=false' height='480' id='player1' name='player1' src='/ckeditor201507/plugins/jwplayer/jwplayer/player.swf' width='640'></embed></object>";
                 }
                 //if (ResourceTypeLabel.Text.Equals("视频"))
                 //{

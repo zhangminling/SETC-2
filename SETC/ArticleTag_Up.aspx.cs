@@ -77,6 +77,6 @@ public partial class ArticleTag_Up : System.Web.UI.Page
 
       protected void Last_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Article_Tag_Man.aspx");
+        Response.Redirect("ArticleTag_Man.aspx");
     }
 }

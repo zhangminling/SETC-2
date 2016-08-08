@@ -20,12 +20,12 @@
 <asp:Button ID="Button2" runat="server" Text="确定" onclick="Button2_Click" />
 </p>
 
-<asp:GridView ID="GridView1" runat="server" Width="98%" AutoGenerateColumns="False" DataKeyNames="ID" 
-        CellPadding="4" ForeColor="#333333" GridLines="None" 
-        RowStyle-HorizontalAlign="Center" 
+<asp:GridView ID="GridView1" runat="server" DataKeyNames="ID" AutoGenerateColumns="False" HeaderStyle-Height="24px" class="table table-striped table-bordered table-hover"
+        GridLines="Horizontal"  style="text-align:center;" ForeColor="#333333" HeaderStyle-HorizontalAlign="Center" Width="99%"
         onselectedindexchanged="GridView1_SelectedIndexChanged" 
         onrowcommand="GridView1_RowCommand">
-    <RowStyle BackColor="#EFF3FB" />
+    <RowStyle BackColor="#F7F6F3" ForeColor="#333333" Height="30px" HorizontalAlign="Center" />
+    <HeaderStyle HorizontalAlign="Center" />
     <Columns>
         <asp:BoundField DataField="Orders" HeaderText="排序" ItemStyle-Width="30" 
             Visible="false" >
@@ -62,12 +62,6 @@
         
         
     </Columns>
-    <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-    <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
-    <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
-    <HeaderStyle BackColor="#507CD1" HorizontalAlign="Center" Font-Bold="True" Height="32" ForeColor="White" />
-    <EditRowStyle BackColor="#2461BF" />
-    <AlternatingRowStyle BackColor="White" />
 </asp:GridView>
 
 </div>

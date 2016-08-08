@@ -245,8 +245,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
-                                    <span class="menu-text">修改--查看标签</span>
+                                <a href="Tags_Man.aspx">
+                                    <span class="menu-text">标签管理</span>
                                 </a>
                             </li>
                             <li>

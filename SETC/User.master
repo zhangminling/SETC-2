@@ -209,15 +209,9 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="User_IsValid.aspx">
-                                            <i class="menu-icon glyphicon glyphicon-stats"></i>
-                                            <span class="menu-text">管理用户状态</span>
-                                        </a>
-                                    </li>
-                                    <li>
                                         <a href="User_Manage.aspx">
                                            <i class="menu-icon wi-day-snow"></i>
-                                            <span class="menu-text">管理角色 </span>
+                                            <span class="menu-text">管理用户 </span>
                                         </a>
                                     </li>
                                 </ul>
@@ -245,8 +239,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
-                                    <span class="menu-text">修改--查看标签</span>
+                                <a href="Tags_Man.aspx">
+                                    <span class="menu-text">标签管理</span>
                                 </a>
                             </li>
                             <li>

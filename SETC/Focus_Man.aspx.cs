@@ -32,7 +32,7 @@ public partial class Focus_Man : System.Web.UI.Page
                 {                    
                     string now = DateTime.Now.ToString("yyyyMMdd_HHmmss");
                     string number = String.Format("{0:0000}", new Random().Next(1000));//生产****四位数的字符串
-                    string physicalName = "Users/Focus/" + now + "_" + number + extension;
+                    string physicalName = "upload/" + DateTime.Now.ToString("yyyyMM") + "/" + Session["UserID"].ToString() + "_" + now + "_" + number + extension;
                     //int fileSize = FileUpload1.PostedFile.ContentLength / 1024 ;
                     //if (fileSize == 0) fileSize = 1;                   
                     FileUpload1.SaveAs(Server.MapPath(physicalName));

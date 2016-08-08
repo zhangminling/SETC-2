@@ -63,28 +63,33 @@ public partial class File_Edit : System.Web.UI.Page
     {
 
         ErrorLabel.Text = "";
+        string folderIDOld="";
         int i = 0;
         using (SqlConnection conn = new DB().GetConnection())
         {
-            string sql = "Update [Resources] set ResourceName=@ResourceName,FolderID=@FolderID,FolderName=@FolderName where ID = @ResourceID";
-            SqlCommand cmd = new SqlCommand(sql, conn);
+            string sql1 = "Select * from [Resources] where ID = @ResourceID";        
+            SqlCommand cmd = new SqlCommand(sql1, conn);
+            cmd.Parameters.AddWithValue("@ResourceID", LabelResourceID.Text);
+            conn.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                folderIDOld = rd["FolderID"].ToString();
+            }
+            conn.Close();
+            string sql = "Update [Resources] set ResourceName=@ResourceName,FolderID=@FolderID,FolderName=@FolderName where ID = @ResourceID;Update ResourceFolders set Counts = Counts-1 where ID = @ID1;Update ResourceFolders set Counts = Counts+1 where ID = @FolderID";
+            cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@ResourceName", ResourceName.Text.Trim());
             cmd.Parameters.AddWithValue("@FolderID", FolderDDL.SelectedItem.Value);
             cmd.Parameters.AddWithValue("@FolderName", FolderDDL.SelectedItem.Text);
-            cmd.Parameters.AddWithValue("@ResourceID", LabelResourceID.Text);           
+            cmd.Parameters.AddWithValue("@ResourceID", LabelResourceID.Text);
+            cmd.Parameters.AddWithValue("@ID1", folderIDOld);
             conn.Open();
             i = cmd.ExecuteNonQuery();
             conn.Close();
-            conn.Open();
-            cmd.CommandText = "SELECT count(*) from Resources where FolderID =@FolderID";
-            int count = int.Parse(Convert.ToString(cmd.ExecuteScalar()));
-            cmd.CommandText = "Update ResourceFolders set Counts = "+count.ToString() + " where ID = @ID";
-            cmd.Parameters.AddWithValue("@ID", FolderDDL.SelectedItem.Value);
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
         }
 
-        if (i == 1)
+        if (i == 3)
         {
             ErrorLabel.Text = "媒体信息更新成功！";
             Response.Redirect(Server.HtmlEncode("File_Man.aspx"));
