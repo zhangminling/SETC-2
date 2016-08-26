@@ -14,21 +14,10 @@ public partial class ArticleTag_Add : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            using (SqlConnection conn = new DB().GetConnection())
-            {
-
-                string sql = "select * from  [ArticleTags] order by ID asc   ";
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                conn.Open();
-                SqlDataReader rd = cmd.ExecuteReader();
-                TagsList.DataSource = rd;
-                TagsList.DataTextField = "TagName";
-                TagsList.DataValueField = "ID";
-                TagsList.DataBind();
-                rd.Close();
+           
                 TagName.Focus();
 
-            }
+            
 
         }
     }
@@ -95,31 +84,6 @@ public partial class ArticleTag_Add : System.Web.UI.Page
         }
        
     }
-   /* private void MyDataBind()
-    {
-        int i = 0;
-        string UserID = Convert.ToString(Session["UserID"]);
-        string username = Convert.ToString(Session["UserName"]);
-        using (SqlConnection conn = new DB().GetConnection())
-        {
-
-            StringBuilder sb = new StringBuilder("insert into ArticleTags(TagName,Description,Articles,UserID,UserName )");
-            sb.Append(" values ( @TagName,@Description,@Articles,@UserID,@UserName ) ");
-            SqlCommand cmd = new SqlCommand(sb.ToString(), conn);
-            cmd.Parameters.AddWithValue("@TagName", TagName.Text);
-            cmd.Parameters.AddWithValue("@Description", TagDescription.Text);
-            cmd.Parameters.AddWithValue("@UserID", UserID);
-            cmd.Parameters.AddWithValue("@Articles", 0);
-            cmd.Parameters.AddWithValue("@UserName", username);
-            conn.Open();
-            i = cmd.ExecuteNonQuery();
-            conn.Close();
-            Response.Write("<script language='javascript'> alert('操作成功');</script>");
-            TagName.Text = "";
-            TagDescription.Text = "";
-
-        }
-    }*/
 
     private bool AlreadyExisted(string param)
     {

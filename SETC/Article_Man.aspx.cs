@@ -8,9 +8,6 @@ using System.Data.SqlClient;
 using System.Text;
 
 
-
-
-
 public partial class Article_Man : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -243,14 +240,7 @@ public partial class Article_Man : System.Web.UI.Page
         
 
       }
-    protected void UpBtn_Click(object sender, EventArgs e)
-    {
-
-    }
-    protected void DownBtn_Click(object sender, EventArgs e)
-    {
-
-    }
+   
     protected void OrdersBtn_Click(object sender, EventArgs e)
     {
         using (SqlConnection conn = new DB().GetConnection())
@@ -290,5 +280,6 @@ public partial class Article_Man : System.Web.UI.Page
     {
         MyDataBind();
     }
-   
+
+  
 }

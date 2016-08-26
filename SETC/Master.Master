@@ -8,7 +8,7 @@
     <title runat="server" id="MasterTitle">教育技术与传播学院 ———— 艺术与技术的融合，智慧与汗水的结晶</title>
     <link rel="stylesheet" href="Master.css" type="text/css" />
     <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/Master.js"></script>    
+    <script type="text/javascript" src="js/Master.js"></script>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>

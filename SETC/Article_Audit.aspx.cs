@@ -13,6 +13,19 @@ public partial class Article_Audit : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            int RoleID = Convert.ToInt16(Session["RoleID"].ToString());
+            if (RoleID > 2)
+            {
+                PassBtn.Visible = false;
+                NoPassBtn.Visible = false;
+            }
+            else
+            {
+               
+                PassBtn.Visible = true;
+                NoPassBtn.Visible = true;
+            }
+
             MyInit();
             MyDataBind();
         }
@@ -231,14 +244,6 @@ public partial class Article_Audit : System.Web.UI.Page
         MyDataBind();
     }
 
-    protected void UpBtn_Click(object sender, EventArgs e)
-    {
-
-    }
-    protected void DownBtn_Click(object sender, EventArgs e)
-    {
-
-    }
     protected void OrdersBtn_Click(object sender, EventArgs e)
     {
         using (SqlConnection conn = new DB().GetConnection())
@@ -260,7 +265,7 @@ public partial class Article_Audit : System.Web.UI.Page
         MyDataBind();
     }
 
-    protected void Media_Click(object sender, EventArgs e)
+   /* protected void Media_Click(object sender, EventArgs e)
     {
         string id = "0";
         for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
@@ -274,7 +279,7 @@ public partial class Article_Audit : System.Web.UI.Page
         }
         Response.Redirect("Article_Media.aspx?ID=" + id);
     }
-   
+   */
     protected void SubsDDL_SelectedIndexChanged1(object sender, EventArgs e)
     {
         MyDataBind();
@@ -283,13 +288,16 @@ public partial class Article_Audit : System.Web.UI.Page
     {
 
         int i = DoPass(1);
-        Util.ShowMessage(i + " Records Passed!", "Article_Audit.aspx");
+        Response.Write(i + " Records Passed!");
+        Response.Redirect("Article_Audit.aspx");
+       // Util.ShowMessage(i + " Records Passed!", "Article_Audit.aspx");
     }
 
     protected void NoPassBtn_Click(object sender, EventArgs e)
     {
         int i = DoPass(2);
-        Util.ShowMessage(i + " Records Not Passed!", "Article_Audit.aspx");
+        Response.Write(i + " Records Not Passed!");
+        Response.Redirect("Article_Audit.aspx");
     }
 
     /*
@@ -302,6 +310,12 @@ public partial class Article_Audit : System.Web.UI.Page
     {
         int result = 0;
         string ids = "";
+     if (status == 1)
+        {
+            passname.Text = "通过审核";
+        }
+        else { passname.Text = "不通过"; }
+     
         for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
         {
             CheckBox cbox = (CheckBox)GridView1.Rows[i].FindControl("ChechBox1");
@@ -313,10 +327,14 @@ public partial class Article_Audit : System.Web.UI.Page
         if (!String.IsNullOrEmpty(ids))
         {
             ids = ids.Substring(1);
-            string sql = "Update Articles set status = " + status + " where id in ( " + ids + " )";
+            string sql = "Update Articles set Status = @Status,StatusName=@StatusName,AuditorID=@AuditorID,Auditor=@Auditor where id in ( " + ids + " )";
             using (SqlConnection conn = new DB().GetConnection())
             {
                 SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@Status", status);
+                cmd.Parameters.AddWithValue("@StatusName", passname.Text);
+                cmd.Parameters.AddWithValue("@AuditorID", Session["UserID"].ToString());
+                cmd.Parameters.AddWithValue("@Auditor", Session["UserName"].ToString());
                 conn.Open();
                 result = cmd.ExecuteNonQuery();
             }
@@ -325,7 +343,4 @@ public partial class Article_Audit : System.Web.UI.Page
     }
 
 
-
-
-   
 }

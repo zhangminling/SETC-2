@@ -80,6 +80,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolderMainContent" Runat="Server">
 <br />
 <asp:Label ID="ArticleID" runat="server" Text="Label" Visible="false"></asp:Label>
+    <asp:Label ID="ArticleRandomID" runat="server" Text="Label" Visible="false"></asp:Label>
 <div id="CurrentPosition">当前位置：<a href="Index.aspx">网站首页</a> >> 
 <asp:HyperLink ID="CategoryHyperLink" runat="server"></asp:HyperLink>
 <asp:Label ID="SubLabel" runat="server" Text=""></asp:Label>
@@ -111,6 +112,10 @@
 	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
 	<a class="jiathis_counter_style"></a>
 </div>
+    <!-- JW Player Library -->
+    <script type="text/javascript" src="jwplayer/jwplayer.js"></script>
+    <!-- JW HTML Config Library -->
+    <script type="text/javascript" src="jwplayer/jwplayer-html-config.min.js"></script>    
 <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
 <!-- JiaThis Button END -->
 <p>&nbsp;</p>

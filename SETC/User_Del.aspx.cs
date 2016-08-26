@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 
 public partial class User_Del : System.Web.UI.Page
 {
+    int t;
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -15,6 +16,10 @@ public partial class User_Del : System.Web.UI.Page
             if (Request.QueryString["IDS"] != null)
             {
                 IDSLabel.Text = Request.QueryString["IDS"].ToString();
+                string[] array = IDSLabel.Text.Split(',');
+                t = array.Length;
+                UserIP.Text = Request.UserHostAddress;//IP地址
+                UserName.Text = Convert.ToString(Session["UserName"]);
                 MyInit();
             }
         }
@@ -22,6 +27,8 @@ public partial class User_Del : System.Web.UI.Page
 
     private void MyInit()
     {
+        string s = "";
+        string[] UserID = new string[t];
         using (SqlConnection conn = new DB().GetConnection())
         {
             SqlCommand cmd = conn.CreateCommand();
@@ -29,7 +36,23 @@ public partial class User_Del : System.Web.UI.Page
             conn.Open();
             SqlDataReader rd = cmd.ExecuteReader();
             GridView1.DataSource = rd;
-            GridView1.DataBind();
+            GridView1.DataBind(); 
+            rd.Close();
+
+            cmd.CommandText = "select UserName from Users where ID in (" + IDSLabel.Text + ") order by ID desc";
+            rd = cmd.ExecuteReader();
+            for (int j = 0; j < t; j++)
+            {
+                if (rd.Read())
+                {
+                    UserID[j] = rd["UserName"].ToString();
+                    for (int k = 0; k < t; k++)
+                    {
+                        s = string.Join(",", UserID);
+                        DeleteUserName.Text = s;
+                    }
+                }
+            }
             rd.Close();
             conn.Close();
         }
@@ -41,9 +64,13 @@ public partial class User_Del : System.Web.UI.Page
           {
               SqlCommand cmd = conn.CreateCommand();
               cmd.CommandText = "Delete from Users where ID in (" + IDSLabel.Text + ") ";
+              SqlCommand cmd1 = conn.CreateCommand();
+              cmd1.CommandText = "Delete from Users_UserTags where UserID in (" + IDSLabel.Text + ") ";
               conn.Open();
               i = cmd.ExecuteNonQuery();
+              cmd1.ExecuteNonQuery();
               cmd.Dispose();
+              cmd1.Dispose();
 
               cmd.CommandText = "select * from Users where ID in (" + IDSLabel.Text + ") order by ID desc";
               SqlDataReader rd = cmd.ExecuteReader();
@@ -54,6 +81,8 @@ public partial class User_Del : System.Web.UI.Page
           }
           if (i > 0)
           {
+              string deleteUserName = "个用户，分别为“" + DeleteUserName.Text + " ”" ;
+              Util.UserUtil_Notes("成功删除了", i, deleteUserName, UserName.Text, "User_Del.aspx", UserIP.Text);
               ResultLabel.Text = "成功删除" + i + "个用户！";
               ResultLabel.ForeColor = System.Drawing.Color.Green;
           }

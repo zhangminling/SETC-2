@@ -30,6 +30,13 @@
 
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <script type="text/javascript" src="assets/js/skins.min.js"></script>
+    <script type="text/javascript">
+        function ckeditor() {
+            var fileUrl = "<%= insertFileHTML %>";
+            window.opener.CKEDITOR.instances.ctl00_ContentPlaceHolder1_Editor1.insertHtml(fileUrl);
+            window.close();
+        }
+    </script>
 
 </head>
 <body>
@@ -69,7 +76,10 @@
                             <asp:DropDownList ID="ResourceTypeDDL" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ResourceTypeDDL_SelectedIndexChanged">
                             </asp:DropDownList>
                             &nbsp;&nbsp;
-                            <asp:DropDownList ID="OrderDDL" runat="server" OnSelectedIndexChanged="OrderDDL_SelectedIndexChanged"
+                            <asp:DropDownList ID="FolderDDL" runat="server" AutoPostBack="True"  OnSelectedIndexChanged="FolderDDL_SelectedIndexChanged">
+                            </asp:DropDownList>
+                            &nbsp;&nbsp;
+                            <asp:DropDownList ID="OrderDDL" runat="server" Visible="false" OnSelectedIndexChanged="OrderDDL_SelectedIndexChanged"
                                 AutoPostBack="True">
                                 <asp:ListItem Value=" Order by ID Desc">ID从大到小</asp:ListItem>
                                 <asp:ListItem Value=" Order by ID Asc">ID从小到大</asp:ListItem>
@@ -107,7 +117,7 @@
                                         <ItemStyle Width="30px" HorizontalAlign="center" />
                                         <HeaderStyle Width="30px" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="多选" HeaderStyle-HorizontalAlign="Center">
+                                    <asp:TemplateField HeaderText="选择" HeaderStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:CheckBox ID="CheckBox1" runat="server" />
                                         </ItemTemplate>
@@ -132,10 +142,8 @@
                         <p>
                             &nbsp;</p>
                         <div>
-                            <asp:Button ID="Button1" runat="server" Text="确认" CssClass="Button" 
+                            <asp:Button ID="Button1" runat="server" Text="插入" CssClass="Button" 
                                  onclick="Insert_Click1"  />&nbsp;&nbsp;
-                            <asp:Button ID="Insert1" runat="server" Text="插入" CssClass="Button"
-                            onclick="Insert_Click1"  />
                             &nbsp;&nbsp;<asp:Button ID="Button3" runat="server" Text="取消" Visible="false" />
                         </div>
                         <p>
@@ -155,23 +163,4 @@
     <script src="assets/js/beyond.min.js"></script>
 
 </body>
-
-<script type="text/javascript">
-    var fileUrl = "<%= insertFileHTML %>";
-    var btn1 = document.getElementById("Insert1");
-    btn1.onclick = function() {
-        //alert(fileUrl);
-        window.opener.CKEDITOR.instances.ctl00_ContentPlaceHolder1_Editor1.insertHtml(fileUrl);
-        window.close();
-    };
-
-    var btn2 = document.getElementById("Insert2");
-    btn2.onclick = function() {
-        //alert(fileUrl);
-        window.opener.CKEDITOR.instances.ctl00_ContentPlaceHolder1_Editor1.insertHtml(fileUrl);
-        window.close();
-    };    
-
-</script>
-
 </html>

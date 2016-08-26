@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Text;
+using System.Data;
 
 public partial class Focus_Recycle : System.Web.UI.Page
 {
@@ -35,29 +36,6 @@ public partial class Focus_Recycle : System.Web.UI.Page
         }
     }
 
-    protected void Button2_Click(object sender, EventArgs e)
-    {
-
-        if (!String.IsNullOrEmpty(ID_Label.Text))
-        {
-            using (SqlConnection conn = new DB().GetConnection())
-            {
-                int orders = Convert.ToInt16(OrdersTextBox.Text);
-                string sql = "update focuses set LinkURL = @LinkURL,Orders = @Orders,Valid=@Valid where ID = @ID";
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                conn.Open();
-                cmd.Parameters.AddWithValue("@LinkURL", LinkURLTextBox.Text);
-                cmd.Parameters.AddWithValue("@Orders", OrdersTextBox.Text);
-                cmd.Parameters.AddWithValue("@Valid", ValidCheckBox.Checked);
-                cmd.Parameters.AddWithValue("@ID", ID_Label.Text);
-                cmd.ExecuteNonQuery();
-            }
-
-            MyDataBind();
-        }
-    }
-
-
     protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
     {
         //string id = GridView1.DataKeys[GridView1.SelectedIndex].Value.ToString();
@@ -85,7 +63,7 @@ public partial class Focus_Recycle : System.Web.UI.Page
         ID_Label.Text = id + "";
         if (e.CommandName.Equals("Edit2"))
         {
-            DoEdit(id);
+            Response.Redirect(Server.HtmlEncode("Focus_Edit.aspx?ID=" + id));
         }
         if (e.CommandName.Equals("Del2"))
         {
@@ -93,37 +71,40 @@ public partial class Focus_Recycle : System.Web.UI.Page
         }
     }
 
-    protected void DoEdit(int id)
-    {
-        using (SqlConnection conn = new DB().GetConnection())
-        {
-            string sql = "select * from Focuses where ID = @ID";
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@ID", id);
-            conn.Open();
-            SqlDataReader rd = cmd.ExecuteReader();
-            if (rd.Read())
-            {
-                Image1.ImageUrl = rd["PhotoSrc"].ToString();
-                LinkURLTextBox.Text = rd["LinkURL"].ToString();
-                OrdersTextBox.Text = rd["Orders"].ToString();
-                ValidCheckBox.Checked = Convert.ToBoolean(rd["Valid"]);
-            }
-            rd.Close();
-            conn.Close();
-        }
-    }
-
     protected void DoDel(int id)
     {
+        string sqlCon = "";
         using (SqlConnection conn = new DB().GetConnection())
         {
-            string sql = "delete from Focuses where ID = @ID";
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@ID", id);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            SqlCommand cmd = conn.CreateCommand();
+            // 删除物理路径下的文件
+            {
+                sqlCon = "Select * from Focuses where ID = @ID";
+                cmd.CommandText = sqlCon;
+                cmd.Parameters.AddWithValue("@ID", id);
+                conn.Open();
+                SqlDataAdapter sda = new SqlDataAdapter();
+                sda.SelectCommand = cmd;
+                DataSet ds = new DataSet();
+                sda.Fill(ds, "PhotoTitle");
+                foreach (DataRow drow in ds.Tables["PhotoTitle"].Rows)
+                {
+                    string FilePath = drow["PhotoSrc"].ToString();
+                    // 删除物理路径下的文件
+                    System.IO.File.Delete(Server.MapPath(FilePath));
+                }
+                conn.Close();
+            }
+            {
+                string sql = "delete from Focuses where ID = @ID";
+                cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@ID", id);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+
         }
+        MyDataBind();
     }
 }

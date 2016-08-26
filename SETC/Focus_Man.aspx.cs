@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Text;
+using System.Data;
 
 public partial class Focus_Man : System.Web.UI.Page
 {
@@ -14,61 +15,7 @@ public partial class Focus_Man : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            ExtensionLabel.Text = ConfigurationManager.AppSettings["PhotoExtension"].ToString();
             MyDataBind();
-        }
-
-    }
-    protected void Button1_Click(object sender, EventArgs e)
-    {
-        if (FileUpload1.HasFile)
-        {
-            try
-            {
-                string fileName = FileUpload1.FileName;
-                string extension = System.IO.Path.GetExtension(fileName).ToLower();
-                string allowExtension = ConfigurationManager.AppSettings["PhotoExtension"].ToString();
-                if (allowExtension.Contains(extension))
-                {                    
-                    string now = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                    string number = String.Format("{0:0000}", new Random().Next(1000));//生产****四位数的字符串
-                    string physicalName = "upload/" + DateTime.Now.ToString("yyyyMM") + "/" + Session["UserID"].ToString() + "_" + now + "_" + number + extension;
-                    //int fileSize = FileUpload1.PostedFile.ContentLength / 1024 ;
-                    //if (fileSize == 0) fileSize = 1;                   
-                    FileUpload1.SaveAs(Server.MapPath(physicalName));
-                    using (SqlConnection conn = new DB().GetConnection())
-                    {
-                        SqlCommand cmd = conn.CreateCommand();
-                        cmd.CommandText = "insert into Focuses( PhotoSrc,UserID,UserName ) values( @PhotoSrc,@UserID,@UserName )";
-                        cmd.Parameters.AddWithValue("@PhotoSrc", physicalName);
-                        cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
-                        cmd.Parameters.AddWithValue("@UserName",Session["UserName"].ToString());
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    Image1.ImageUrl = physicalName;
-
-                    MyDataBind();
-                    
-
-                }
-                else
-                {
-                    ResultLabel.Text = "上传图片格式错误！";
-                    ResultLabel.Visible = true;
-                }
-            }
-            catch (Exception exc)
-            { 
-                ResultLabel.Text = "上传图片失败。请重试！或者与管理员联系！<br>" + exc.ToString();
-                ResultLabel.Visible = true;
-            }
-        }
-        else
-        {
-            ResultLabel.Text = "所选图片格式不符合要求";
-            ResultLabel.Visible = true;
         }
 
     }
@@ -87,29 +34,6 @@ public partial class Focus_Man : System.Web.UI.Page
             rd.Close();
         }
     }
-
-    protected void Button2_Click(object sender, EventArgs e)
-    {
-
-        if (!String.IsNullOrEmpty(ID_Label.Text))
-        {
-            using (SqlConnection conn = new DB().GetConnection())
-            {
-                int orders = Convert.ToInt16(OrdersTextBox.Text);                
-                string sql = "update focuses set LinkURL = @LinkURL,Orders = @Orders,Valid=@Valid where ID = @ID";
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                conn.Open();
-                cmd.Parameters.AddWithValue("@LinkURL", LinkURLTextBox.Text);
-                cmd.Parameters.AddWithValue("@Orders", OrdersTextBox.Text);
-                cmd.Parameters.AddWithValue("@Valid", ValidCheckBox.Checked);
-                cmd.Parameters.AddWithValue("@ID", ID_Label.Text);
-                cmd.ExecuteNonQuery();
-            }
-
-            MyDataBind();
-        }
-    }
-
 
     protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -138,7 +62,7 @@ public partial class Focus_Man : System.Web.UI.Page
         ID_Label.Text = id + "";
         if (e.CommandName.Equals("Edit2"))
         {
-            DoEdit(id);
+            Response.Redirect(Server.HtmlEncode("Focus_Edit.aspx?ID=" + id));
         }
         if (e.CommandName.Equals("Del2"))
         {
@@ -146,37 +70,63 @@ public partial class Focus_Man : System.Web.UI.Page
         }
     }
 
-    protected void DoEdit(int id)
-    {
-        using (SqlConnection conn = new DB().GetConnection())
-        {
-            string sql = "select * from Focuses where ID = @ID";
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@ID", id);
-            conn.Open();
-            SqlDataReader rd = cmd.ExecuteReader();
-            if (rd.Read())
-            {
-                Image1.ImageUrl = rd["PhotoSrc"].ToString();
-                LinkURLTextBox.Text = rd["LinkURL"].ToString();
-                OrdersTextBox.Text = rd["Orders"].ToString();
-                ValidCheckBox.Checked = Convert.ToBoolean(rd["Valid"]);
-            }
-            rd.Close();
-            conn.Close();
-        }
-    }
-
     protected void DoDel(int id)
     {
+        string sqlCon = "";
         using (SqlConnection conn = new DB().GetConnection())
         {
-            string sql = "delete from Focuses where ID = @ID";
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@ID", id);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            SqlCommand cmd = conn.CreateCommand();
+            // 删除物理路径下的文件
+            {
+                sqlCon = "Select * from Focuses where ID = @ID";
+                cmd.CommandText = sqlCon;
+                cmd.Parameters.AddWithValue("@ID", id);
+                conn.Open();
+                SqlDataAdapter sda = new SqlDataAdapter();
+                sda.SelectCommand = cmd;
+                DataSet ds = new DataSet();
+                sda.Fill(ds, "PhotoTitle");
+                foreach (DataRow drow in ds.Tables["PhotoTitle"].Rows)
+                {
+                    string FilePath = drow["PhotoSrc"].ToString();
+                    // 删除物理路径下的文件
+                    System.IO.File.Delete(Server.MapPath(FilePath));
+                }
+                conn.Close();
+            }
+            {
+                string sql = "delete from Focuses where ID = @ID";
+                cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@ID", id);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+            
         }
+        MyDataBind();
+    }
+    protected void OrdersBtn_Click(object sender, EventArgs e)
+    {
+        using (SqlConnection conn = new DB().GetConnection())
+        {
+            SqlCommand cmd = conn.CreateCommand();
+            conn.Open();
+            for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+            {
+                TextBox OrdersTB = (TextBox)GridView1.Rows[i].FindControl("OrdersTB");
+                if (!GridView1.Rows[i].Cells[0].Text.Trim().Equals(OrdersTB.Text.Trim()))
+                {
+                    cmd.CommandText = "Update Focuses set Orders = " + OrdersTB.Text.Trim() + " where ID = " + GridView1.DataKeys[i].Value;
+                    cmd.ExecuteNonQuery();
+                    cmd.Dispose();
+                }
+            }
+        }
+        MyDataBind();
+    }
+    protected void AddBtn_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Server.HtmlEncode("Focus_Upload.aspx"));
     }
 }

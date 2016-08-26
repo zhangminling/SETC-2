@@ -47,6 +47,9 @@ public partial class Article_DelTrue : System.Web.UI.Page
             i = cmd.ExecuteNonQuery();
             cmd.Dispose();
 
+ 
+
+
             cmd.CommandText = "select * from Articles where ID in (" + IDSLabel.Text + ") order by ID desc";
             SqlDataReader rd = cmd.ExecuteReader();
             GridView1.DataSource = rd;

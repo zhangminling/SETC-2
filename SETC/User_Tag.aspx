@@ -29,13 +29,18 @@
                                         <h6>标签描述</h6>
                                         <asp:TextBox ID="TagDescription"  class="form-control" TextMode="MultiLine" Columns="40" Rows="4" placeholder="关于你的标签" runat="server"></asp:TextBox>
                                         <p>
-                                        <asp:Panel ID="ClassifyPanel" runat="server" style="margin-left:-15px;">
-                                          &nbsp; &nbsp; &nbsp;<asp:RadioButton ID="CheckRole" runat="server" GroupName="Valid" Text="查看权限" />
+                                       <%-- <asp:Panel ID="ClassifyPanel" runat="server" style="margin-left:-15px;">
+                                          &nbsp; &nbsp; &nbsp;
                                            &nbsp; &nbsp; &nbsp;<asp:RadioButton ID="PublishDepartment" runat="server" GroupName="Valid" Text="发表部门" />   
              
-                                        </asp:Panel>
+                                        </asp:Panel>--%>
+      
+         
+
      <asp:Button ID="Button1" runat="server" class="btn btn-magenta" Text="新建标签" style="margin-left:5px;margin-top:2px;" OnClick="Button1_Click"/>
                                        </p>
+     
+                                         
                                     </div>
      </div>
         </div>
@@ -55,14 +60,13 @@
                                             <p></p>
                                      
                                             <asp:Button ID="Button3"  class="btn btn-sky shiny" style="margin-left:800px;margin-top:15px;" runat="server" Text="确认" OnClick="Button2_Click" />
+                                            
                                          
                                     </div>
                                         </div>
                                 </div>
              </ContentTemplate>
         </asp:UpdatePanel>
-
-
-
+   
 </asp:Content>
 

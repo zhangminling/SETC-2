@@ -14,33 +14,32 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
          <asp:Label ID="LabelUserID" runat="server" Visible="false" Text=""></asp:Label>
        <div id="CurrentPosition">当前位置：<a href="#">用户标签</a> >> <a href="#">添加标签</a></div>
-    <p></p>
+    <p>&nbsp;</p>
      
-    <p><h4 class="row-title before-sky"> <i class="fa fa-square-o sky"></i>标签</h4></p>
     <div class="row">
      <div class="col-lg-6 col-sm-6 col-xs-12">
                                     <div class="well with-header">
-                                        <div class="header bordered-darkpink">添加标签</div>
-                                        <h6>标签名</h6>
+                                        <div class="header bordered-blue">添加标签</div>
+                                        <h6>标签名    <asp:Label ID="ErrorLabel" runat="server" Text="" ForeColor="Red"></asp:Label></h6>
                                         <asp:TextBox ID="TagName"  class="form-control" TextMode="MultiLine" Columns="20" Rows="1" placeholder="此字段不能为空" runat="server"></asp:TextBox>
-                 
+                                           <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="/*标签名必填*/" ControlToValidate="TagName"></asp:RequiredFieldValidator>
                                         <hr class="wide" />
                                         <h6>标签描述</h6>
                                         <asp:TextBox ID="TagDescription"  class="form-control" TextMode="MultiLine" Columns="40" Rows="4" placeholder="关于你的标签" runat="server"></asp:TextBox>
-                                        <p>
+                                     <%--   <p>
                                         <asp:Panel ID="ClassifyPanel" runat="server" style="margin-left:-15px;">
                                           &nbsp; &nbsp; &nbsp;<asp:RadioButton ID="CheckRole" runat="server" GroupName="Valid" Text="查看权限" />
                                            &nbsp; &nbsp; &nbsp;<asp:RadioButton ID="PublishDepartment" runat="server" GroupName="Valid" Text="发表部门" />   
              
                                         </asp:Panel>
      
-                                       </p>
+                                       </p>--%>
                                         <p></p>
-                                        <asp:Button ID="Button1" runat="server" class="btn btn-magenta" Text="新建标签" style="margin-left:5px;margin-top:2px;" OnClick="Button1_Click"/>
+                                        <asp:Button ID="Button1" runat="server" class="btn btn-info" Text="新建标签" style="margin-left:5px;margin-top:2px;" OnClick="Button1_Click"/>
                                     </div>
      </div>
         </div>
-   <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+  <%-- <asp:UpdatePanel ID="UpdatePanel1" runat="server">
          <ContentTemplate>
         <div class="row">
              
@@ -64,6 +63,6 @@
                 
         </div>
              </ContentTemplate>
-        </asp:UpdatePanel>     
+        </asp:UpdatePanel>     --%>
 </asp:Content>
 

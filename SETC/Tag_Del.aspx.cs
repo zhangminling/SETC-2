@@ -12,11 +12,16 @@ public partial class Tag_Delete : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            if (Request.QueryString["IDS"] != null)
+            if (Session["RoleID"] == null || Session["UserID"] == null)
+            {
+                Util.ShowMessage("用户登录超时，请重新登录！", "Login.aspx");
+            }
+            else if (Request.QueryString["IDS"] != null)
             {
                 IDSLabel.Text = Request.QueryString["IDS"].ToString();
                 MyInit();
             }
+           
         }
     }
 
@@ -35,6 +40,7 @@ public partial class Tag_Delete : System.Web.UI.Page
             conn.Close();
         }
     }
+
     protected void Button2_Click(object sender, EventArgs e)
     {
         Response.Redirect("Tags_Man.aspx");

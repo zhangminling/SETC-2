@@ -133,6 +133,50 @@ public partial class Tags_Man : System.Web.UI.Page
 
     protected void UpdateBtn_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Tag_Edit.aspx");
+        string ids = "";
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("ChechBox1");
+            if (checkBox.Checked == true)
+            {
+                ids = GridView1.DataKeys[i].Value.ToString();
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            Response.Redirect(Server.HtmlEncode("Tag_Edit.aspx?ID=" + ids));
+        }
+    }
+    protected void DelTagUserBtn_Click(object sender, EventArgs e)
+    {
+        string ids = "";
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("ChechBox1");
+            if (checkBox.Checked == true)
+            {
+                ids = GridView1.DataKeys[i].Value.ToString();
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            Response.Redirect(Server.HtmlEncode("TagUsers_Del.aspx?ID=" + ids));
+        }
+    }
+    protected void AddTagUserBtn_Click(object sender, EventArgs e)
+    {
+        string ids = "";
+        for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("ChechBox1");
+            if (checkBox.Checked == true)
+            {
+                ids = GridView1.DataKeys[i].Value.ToString();
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            Response.Redirect(Server.HtmlEncode("TagUsers_Add.aspx?ID=" + ids));
+        }
     }
 }

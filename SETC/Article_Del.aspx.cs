@@ -16,6 +16,7 @@ public partial class Article_Del : System.Web.UI.Page
             {
                 IDSLabel.Text = Request.QueryString["IDS"].ToString();
                 MyInit();
+              
             }
         }
     }
@@ -40,11 +41,21 @@ public partial class Article_Del : System.Web.UI.Page
         int i = 0;
         using (SqlConnection conn = new DB().GetConnection())
         {
-            SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "Update Articles set Valid=0 where ID in (" + IDSLabel.Text + ") ";
+           
+
+            SqlCommand cmd1 = conn.CreateCommand();
+            cmd1.CommandText = "Delete from Articles_ArticleTags where ArticleID in (" + IDSLabel.Text + ") ";
             conn.Open();
+            i=cmd1.ExecuteNonQuery();
+            cmd1.Dispose();
+
+          
+
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "Update Articles set Valid=0 where ID in (" + IDSLabel.Text + ") ";               
             i = cmd.ExecuteNonQuery();
             cmd.Dispose();
+
 
             cmd.CommandText = "select * from Articles where  Valid=1 and ID in (" + IDSLabel.Text + ") order by ID desc";            
             SqlDataReader rd = cmd.ExecuteReader();
@@ -52,6 +63,7 @@ public partial class Article_Del : System.Web.UI.Page
             GridView1.DataBind();
             rd.Close();
             conn.Close();
+
 
         }
         if (i > 0)

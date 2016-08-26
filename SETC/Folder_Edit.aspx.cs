@@ -15,6 +15,13 @@ public partial class Folder_Edit : System.Web.UI.Page
         if (!IsPostBack)
         {
             LabelFolderID.Text = Request.QueryString["ID"];
+            if (LabelFolderID.Text == "96" || LabelFolderID.Text == "101")
+            {
+                FolderName.Enabled = false;
+                Button1.Enabled = false;
+                Button2.Enabled = false;
+                ErrorLabel.Text = "系统文件夹不能进行编辑";
+            }
             using (SqlConnection conn = new DB().GetConnection())
             {
                 string sql = "Select * from [ResourceFolders] where ID = @FolderID";                
@@ -121,6 +128,7 @@ public partial class Folder_Edit : System.Web.UI.Page
 
         ErrorLabel.Text = "";
         int i = 0;
+        int count = 0;
         string sqlCon = "";
         using (SqlConnection conn = new DB().GetConnection())
         {
@@ -134,28 +142,42 @@ public partial class Folder_Edit : System.Web.UI.Page
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
-            //删除服务器的数据
+            ////删除服务器的数据
+            //{
+            //    sqlCon = "Select * from Resources where FolderID = @FolderID";
+            //    cmd.CommandText = sqlCon;
+            //    conn.Open();
+            //    SqlDataAdapter sda = new SqlDataAdapter();
+            //    sda.SelectCommand = cmd;
+            //    DataSet ds = new DataSet();
+            //    sda.Fill(ds, "FolderFiles");
+            //    foreach (DataRow drow in ds.Tables["FolderFiles"].Rows)
+            //    {
+            //        string FilePath = drow["FilePath"].ToString();
+            //        // 删除物理路径下的文件
+            //        System.IO.File.Delete(Server.MapPath(FilePath));
+            //    }
+            //    conn.Close();
+            //}
+            ////将在Resources表中放在文件夹下的资源都删掉
+            //{
+            //    sqlCon = "Delete from Resources where FolderID  = @FolderID";
+            //    cmd.CommandText = sqlCon;
+            //    conn.Open();
+            //    cmd.ExecuteNonQuery();
+            //    conn.Close();
+            //    cmd.Dispose();
+            //}
+
+            //删除文件夹时将文件夹下的资源移至默认文件夹（默认文件夹不可删除）
             {
-                sqlCon = "Select * from Resources where FolderID = @FolderID";
+                sqlCon = "Update [Resources] set FolderID=96,FolderName='默认文件夹' where FolderID = @FolderID";
                 cmd.CommandText = sqlCon;
                 conn.Open();
-                SqlDataAdapter sda = new SqlDataAdapter();
-                sda.SelectCommand = cmd;
-                DataSet ds = new DataSet();
-                sda.Fill(ds, "FolderFiles");
-                foreach (DataRow drow in ds.Tables["FolderFiles"].Rows)
-                {
-                    string FilePath = drow["FilePath"].ToString();
-                    // 删除物理路径下的文件
-                    System.IO.File.Delete(Server.MapPath(FilePath));
-                }
+                count = cmd.ExecuteNonQuery();
                 conn.Close();
-            }
-            //将在Resources表中放在文件夹下的资源都删掉
-            {
-                sqlCon = "Delete from Resources where FolderID  = @FolderID";
-                cmd.CommandText = sqlCon;
                 conn.Open();
+                cmd.CommandText = "Update ResourceFolders set Counts = Counts+" + count.ToString() + " where ID = 96";
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 cmd.Dispose();

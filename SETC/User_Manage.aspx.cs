@@ -9,43 +9,14 @@ using System.Text;
 
 public partial class Default3 : System.Web.UI.Page
 {
+   
     protected void Page_Load(object sender, EventArgs e)
     {
+     
          if (!IsPostBack)
             {
-             string userid = Convert.ToString(Session["UserID"]);
-             using (SqlConnection conn = new DB().GetConnection())
-            {
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "select distinct RoleName as RoleName from Roles";
-                conn.Open();
-                SqlDataReader rd = cmd.ExecuteReader();
-                RoleTypeDDL.DataSource = rd;
-                RoleTypeDDL.DataValueField = "RoleName";
-                RoleTypeDDL.DataTextField = "RoleName";
-                RoleTypeDDL.DataBind();
-                rd.Close();
-                RoleTypeDDL.Items.Insert(0, new ListItem("角色类型", ""));
-
-
-                cmd.CommandText = "select distinct Valid as Valid from Users";
-                rd = cmd.ExecuteReader();
-                IsValid.DataSource = rd;
-                IsValid.DataValueField = "Valid";
-                IsValid.DataTextField = "Valid";
-                IsValid.DataBind();
-                rd.Close();
-                IsValid.Items.Insert(0, new ListItem("状态", ""));
-
-                cmd.CommandText = "select * from UserTags where UserID = @UserID and Users <> 0 order by ID desc";
-                cmd.Parameters.AddWithValue("@UserID", userid);
-                rd = cmd.ExecuteReader();
-                CheckBoxList1.DataSource = rd;
-                CheckBoxList1.DataTextField = "TagName";
-                CheckBoxList1.DataValueField = "ID";
-                CheckBoxList1.DataBind();
-                rd.Close();
-            }
+             string userid = Convert.ToString(Session["UserID"]);             
+            
                 if (Session["RoleID"] == null || Session["UserID"] == null)
                 {
                     Util.ShowMessage("用户登录超时，请重新登录！", "Login.aspx");
@@ -57,6 +28,95 @@ public partial class Default3 : System.Web.UI.Page
                     int roleID = Util.UpdateAvatar(username);
                     AvatarImage.ImageUrl = Session["Avatar"].ToString();
                     AvatarImage1.ImageUrl = Session["Avatar"].ToString();
+                    if (roleID == 1)
+                    {
+                        AdminUser.Visible = true;
+                        EditorArctile.Visible = true;
+                        FilePanel.Visible = true;
+                        ClassPanel.Visible = true;
+                        FocusPanel.Visible = true;
+                        MenuPanel.Visible = true;
+                        UserTagPanel.Visible = true;
+
+                    }
+                    else if (roleID == 2)
+                    {
+
+                        AdminUser.Visible = false;
+                        EditorArctile.Visible = true;
+                        FilePanel.Visible = false;
+                        ClassPanel.Visible = true;
+                        FocusPanel.Visible = false;
+                        MenuPanel.Visible = true;
+                        UserTagPanel.Visible = false;
+
+                    }
+                    else if (roleID == 3)
+                    {
+                        AdminUser.Visible = false;
+                        EditorArctile.Visible = false;
+                        FilePanel.Visible = false;
+                        ClassPanel.Visible = false;
+                        FocusPanel.Visible = false;
+                        MenuPanel.Visible = false;
+                        UserTagPanel.Visible = false;
+
+                    }
+                    else if (roleID == 4)
+                    {
+                        AdminUser.Visible = false;
+                        EditorArctile.Visible = false;
+                        FilePanel.Visible = false;
+                        ClassPanel.Visible = false;
+                        FocusPanel.Visible = false;
+                        MenuPanel.Visible = false;
+                        UserTagPanel.Visible = false;
+
+                    }
+                    else
+                    {
+                        AdminUser.Visible = false;
+                        EditorArctile.Visible = false;
+                        FilePanel.Visible = false;
+                        ClassPanel.Visible = false;
+                        FocusPanel.Visible = false;
+                        MenuPanel.Visible = false;
+                        UserTagPanel.Visible = false;
+
+                    }
+
+                    using (SqlConnection conn = new DB().GetConnection())
+                    {
+                        SqlCommand cmd = conn.CreateCommand();
+                        cmd.CommandText = "select distinct RoleName as RoleName from Roles";
+                        conn.Open();
+                        SqlDataReader rd = cmd.ExecuteReader();
+                        RoleTypeDDL.DataSource = rd;
+                        RoleTypeDDL.DataValueField = "RoleName";
+                        RoleTypeDDL.DataTextField = "RoleName";
+                        RoleTypeDDL.DataBind();
+                        rd.Close();
+                        RoleTypeDDL.Items.Insert(0, new ListItem("角色类型", ""));
+
+
+                        cmd.CommandText = "select distinct Valid as Valid from Users";
+                        rd = cmd.ExecuteReader();
+                        IsValid.DataSource = rd;
+                        IsValid.DataValueField = "Valid";
+                        IsValid.DataTextField = "Valid";
+                        IsValid.DataBind();
+                        rd.Close();
+                        IsValid.Items.Insert(0, new ListItem("状态", ""));
+
+                        cmd.CommandText = "select * from UserTags where UserID = @UserID and Users <> 0 order by ID desc";
+                        cmd.Parameters.AddWithValue("@UserID", userid);
+                        rd = cmd.ExecuteReader();
+                        CheckBoxList1.DataSource = rd;
+                        CheckBoxList1.DataTextField = "TagName";
+                        CheckBoxList1.DataValueField = "ID";
+                        CheckBoxList1.DataBind();
+                        rd.Close();
+                    }
 
                 }
               //  MyDataBind();
@@ -154,8 +214,13 @@ public partial class Default3 : System.Web.UI.Page
                 tags += "," + CheckBoxList1.Items[i].Value;
             }
         }
+      
+        if(tags == "")
+        {
+            Util.ShowMessage("请先选择要查询的标签","");
+        }
+        else {
         tags = tags.Substring(1);
-
         string sql = "select UserID from Users_UserTags where UserTagID in (" + tags + ") ";
         string sql2 = "SELECT count(UserID) from Users_UserTags where UserTagID in (" + tags + ")";
         using (SqlConnection conn = new DB().GetConnection())
@@ -218,12 +283,16 @@ public partial class Default3 : System.Web.UI.Page
 
 
         }
+        }
     }
         
-
+    //启用用户操作
     protected void IsTrue_Click(object sender, EventArgs e)
     {
         string ids = "";
+        int j;
+        string IP = Request.UserHostAddress;//IP地址
+        string username = Convert.ToString(Session["UserName"]);
         for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
         {
             CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("ChechBox1");
@@ -232,26 +301,60 @@ public partial class Default3 : System.Web.UI.Page
                 ids += "," + GridView1.DataKeys[i].Value;
             }
         }
+        if (ids == "")
+        {
+            Util.ShowMessage("请先选择要启用的用户", "");
+        }
+        else 
+        { 
         ids = ids.Substring(1);
-        Label3.Text = ids;
+        UserIDs.Text = ids;
+        string[] array = UserIDs.Text.Split(',');
+        int k = array.Length;
+        string s = "";
+        string[] UserID = new string[k];
         string t = "True";
         using (SqlConnection conn = new DB().GetConnection())
         {
             conn.Open();
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "Update [Users] set Valid = @Valid  where ID in (" + Label3.Text + ") ";
+            cmd.CommandText = "Update [Users] set Valid = @Valid  where ID in (" + UserIDs.Text + ") ";
             cmd.Parameters.AddWithValue("@Valid", t);
-            cmd.ExecuteNonQuery();
+            j = cmd.ExecuteNonQuery();
             cmd.Dispose();
+
+            cmd.CommandText = "select UserName from Users where ID in (" + UserIDs.Text + ") order by ID desc";
+            SqlDataReader rd = cmd.ExecuteReader();
+            for (int num1 = 0; num1 < k; num1++)
+            {
+                if (rd.Read())
+                {
+                    UserID[num1] = rd["UserName"].ToString();
+                    for (int num2 = 0; num2 < k; num2++)
+                    {
+                        s = string.Join(",", UserID);
+                        IsTrueUsers.Text = s;
+                    }
+                }
+            }
+            rd.Close();
             conn.Close();
+
+            string isTrueUserName = "个用户名为“" + IsTrueUsers.Text.Trim() + "”的用户";
+            Util.UserUtil_Notes("成功启用了", j, isTrueUserName, username, "User_Manage.aspx", IP);
             Response.Write("<script language='javascript'> alert('操作成功');</script>");
         }
         MyDataBind2();
+        }
     }
 
+    //禁用用户操作
     protected void IsFalse_Click(object sender, EventArgs e)
     {
         string ids = "";
+        int j;
+        string IP = Request.UserHostAddress;//IP地址
+        string username = Convert.ToString(Session["UserName"]);
         for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
         {
             CheckBox checkBox = (CheckBox)GridView1.Rows[i].FindControl("ChechBox1");
@@ -260,24 +363,55 @@ public partial class Default3 : System.Web.UI.Page
                 ids += "," + GridView1.DataKeys[i].Value;
             }
         }
-        ids = ids.Substring(1);
-        Label3.Text = ids;
-        string f = "False";
-        using (SqlConnection conn = new DB().GetConnection())
+        if (ids == "")
         {
-            conn.Open();
-
-            SqlCommand cmd1 = conn.CreateCommand();
-            cmd1.CommandText = "Update [Users] set Valid = @Valid  where ID in (" + Label3.Text + ") ";
-            cmd1.Parameters.AddWithValue("@Valid", f);
-            cmd1.ExecuteNonQuery();
-            cmd1.Dispose();
-            conn.Close();
-            Response.Write("<script language='javascript'> alert('操作成功');</script>");
+            Util.ShowMessage("请先选择要禁用的用户", "");
         }
-        MyDataBind2();
+        else
+        {
+            ids = ids.Substring(1);
+            UserIDs.Text = ids;
+            string[] array = UserIDs.Text.Split(',');
+            int k = array.Length;
+            string s = "";
+            string[] UserID = new string[k];
+            string f = "False";
+            using (SqlConnection conn = new DB().GetConnection())
+            {
+                conn.Open();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "Update [Users] set Valid = @Valid  where ID in (" + UserIDs.Text + ") ";
+                cmd.Parameters.AddWithValue("@Valid", f);
+                j = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+
+                cmd.CommandText = "select UserName from Users where ID in (" + UserIDs.Text + ") order by ID desc";
+                SqlDataReader rd = cmd.ExecuteReader();
+                for (int num1 = 0; num1 < k; num1++)
+                {
+                    if (rd.Read())
+                    {
+                        UserID[num1] = rd["UserName"].ToString();
+                        for (int num2 = 0; num2 < k; num2++)
+                        {
+                            s = string.Join(",", UserID);
+                            IsTrueUsers.Text = s;
+                        }
+                    }
+                }
+                rd.Close();
+                conn.Close();
+
+                string isTrueUserName = "个用户名为“" + IsTrueUsers.Text.Trim() + "”的用户";
+                Util.UserUtil_Notes("成功禁用了", j, isTrueUserName, username, "User_Manage.aspx", IP);
+                Response.Write("<script language='javascript'> alert('操作成功');</script>");
+            }
+            MyDataBind2();
+        }
     }
 
+    //全选操作
     protected void SelectAllCheckBox_CheckedChanged(object sender, EventArgs e)
     {
         for (int i = 0; i <= GridView1.Rows.Count - 1; i++)
@@ -294,6 +428,7 @@ public partial class Default3 : System.Web.UI.Page
         }
     }
 
+    //修改操作
     protected void UpdateBtn_Click(object sender, EventArgs e)
     {
         string ids = "";
@@ -360,6 +495,6 @@ public partial class Default3 : System.Web.UI.Page
 
     protected void TagBtn_Click(object sender, EventArgs e)
     {
-        TagsUsersSearch();
+       TagsUsersSearch();
     }
 }

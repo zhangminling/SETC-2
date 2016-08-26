@@ -38,13 +38,23 @@ public partial class File_Del2 : System.Web.UI.Page
     protected void Button1_Click(object sender, EventArgs e)
     {
         int i = 0;
+        int rowNo = 0;
         using (SqlConnection conn = new DB().GetConnection())
         { 
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "Update Resources set Valid=0 where ID in (" + IDSLabel.Text + ") ";
+            cmd.CommandText = "Update Resources set Valid=0 where ID in (" + IDSLabel.Text + ")";
             conn.Open();
             i = cmd.ExecuteNonQuery();
             cmd.Dispose();
+
+            foreach (GridViewRow row in GridView1.Rows)
+            {
+                string hidecolum_folderidN = GridView1.DataKeyNames[0];
+                int hidecolum_folderidValue = (int)GridView1.DataKeys[rowNo].Value;
+                cmd.CommandText = "Update ResourceFolders set Counts = Counts-1 where ID = " + hidecolum_folderidValue.ToString() + "  ";
+                cmd.ExecuteNonQuery();
+                rowNo++;
+            }
 
             cmd.CommandText = "select * from Resources where  Valid=1 and ID in (" + IDSLabel.Text + ") order by ID desc";
             SqlDataReader rd = cmd.ExecuteReader();

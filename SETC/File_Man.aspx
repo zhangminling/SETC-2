@@ -2,18 +2,33 @@
     CodeFile="File_Man.aspx.cs" Inherits="File_Man" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <style type="text/css">
+        #GridViewDiv {
+            margin-top: 20px;
+        }
+    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div id="CurrentPosition">
         当前位置：资源管理 >> <a href="File_Man.aspx">媒体管理</a></div>
-    <p>
-        &nbsp;</p>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
+            <div class="page-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="widget">
+                            <div class="widget-header ">
+                                <span class="widget-caption">媒体管理</span>
+                            </div>
+                        <div class="widget-body">
             <div id="Man_Nav">
-                <asp:TextBox ID="SearchTB" runat="server" CssClass="TextBox"></asp:TextBox>
-                &nbsp;
-                <asp:Button ID="SearchBtn" runat="server" Text="搜索" class="btn btn-default shiny" OnClick="SearchBtn_Click" />&nbsp;&nbsp;
+                <div class="form-group col-xs-3 col-md-3">
+                    <span class="input-icon">
+                        <asp:TextBox ID="SearchTB" runat="server" placeholder="查询资源" class="form-control input-sm"></asp:TextBox>
+                        <i class="glyphicon glyphicon-search danger circular"></i>
+                    </span>
+                </div>
+                <asp:Button ID="SearchBtn" runat="server" Text="搜索" class="btn btn-info" OnClick="SearchBtn_Click" />&nbsp;&nbsp;
                 <asp:DropDownList ID="AuthorDDL" runat="server" OnSelectedIndexChanged="AuthorDDL_SelectedIndexChanged"
                     AutoPostBack="True">
                 </asp:DropDownList>
@@ -32,28 +47,30 @@
             </div>    
                 <p>
                 &nbsp;</p>
-            <div>
-                <asp:CheckBox ID="SelectAllCheckBox" runat="server" Text=" 全选 " AutoPostBack="true" OnCheckedChanged="SelectAllCheckBox_CheckedChanged" />&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="UpdateBtn" runat="server" Text="修改" class="btn btn-default shiny" OnClick="UpdateBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="MoveBtn" runat="server" Text="移动" class="btn btn-default shiny" OnClick="MoveBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="DelBtn" runat="server" Text="删除" class="btn btn-default shiny" OnClick="DelBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="AddBtn" runat="server" Text="上传资源" class="btn btn-default shiny" OnClick="AddBtn_Click" />
+            <div class=" col-xs-10 col-md-10">
+                <asp:Button ID="UpdateBtn" runat="server" Text="修改" class="btn btn-info" OnClick="UpdateBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:Button ID="MoveBtn" runat="server" Text="移动" class="btn btn-info" OnClick="MoveBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;                
+                <asp:Button ID="AddBtn" runat="server" Text="上传资源" class="btn btn-success" OnClick="AddBtn_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:Button ID="DelBtn" runat="server" Text="移至回收站" class="btn btn-warning" OnClick="DelBtn_Click" />
             </div>
-            <p>&nbsp;</p>
-            <div class="Label1">
-                总共：<asp:Label ID="Label1" runat="server" ForeColor="#5D7B9D" Font-Bold="true"></asp:Label>
-                条记录，每页显示：
-                <asp:DropDownList ID="PageSizeDDL" runat="server" AutoPostBack="true" Font-Bold="true" OnSelectedIndexChanged="PageSizeDDL_SelectedIndexChanged" ForeColor="#5D7B9D">
-                    <asp:ListItem Value="2">2</asp:ListItem>
-                    <asp:ListItem Value="10">10</asp:ListItem>
-                    <asp:ListItem Value="20" Selected="True">20</asp:ListItem>
-                    <asp:ListItem Value="50">50</asp:ListItem>
-                    <asp:ListItem Value="100">100</asp:ListItem>
-                    <asp:ListItem Value="200">200</asp:ListItem>
-                    <asp:ListItem Value="500">500</asp:ListItem>
-                </asp:DropDownList>
-                条记录， 共<asp:Label ID="Label2" runat="server" ForeColor="#5D7B9D" Font-Bold="true"></asp:Label>页。
-                <asp:Label ID="TestLabel" runat="server" Text="" Visible="true"></asp:Label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <div style="margin-top: 60px;"></div>
+            <div class=" col-xs-12 col-md-12">
+                <asp:CheckBox ID="SelectAllCheckBox" runat="server" Text=" 全选 " AutoPostBack="true" OnCheckedChanged="SelectAllCheckBox_CheckedChanged" />&nbsp;&nbsp;
+                <div class="Label1">
+                    总共：<asp:Label ID="Label1" runat="server" ForeColor="#5D7B9D" Font-Bold="true"></asp:Label>
+                    条记录，每页显示：
+                    <asp:DropDownList ID="PageSizeDDL" runat="server" AutoPostBack="true" Font-Bold="true" OnSelectedIndexChanged="PageSizeDDL_SelectedIndexChanged" ForeColor="#5D7B9D">
+                        <asp:ListItem Value="2">2</asp:ListItem>
+                        <asp:ListItem Value="10">10</asp:ListItem>
+                        <asp:ListItem Value="20" Selected="True">20</asp:ListItem>
+                        <asp:ListItem Value="50">50</asp:ListItem>
+                        <asp:ListItem Value="100">100</asp:ListItem>
+                        <asp:ListItem Value="200">200</asp:ListItem>
+                        <asp:ListItem Value="500">500</asp:ListItem>
+                    </asp:DropDownList>
+                    条记录， 共<asp:Label ID="Label2" runat="server" ForeColor="#5D7B9D" Font-Bold="true"></asp:Label>页
+                    <asp:Label ID="TestLabel" runat="server" Text="" Visible="true"></asp:Label>
+                </div>
             </div>
             <br />
             <div id="GridViewDiv">
@@ -94,6 +111,11 @@
                     PrevPageText="上一页" OnPageChanged="AspNetPager1_PageChanged" PagingButtonSpacing="0">
                 </webdiyer:AspNetPager>
             </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>

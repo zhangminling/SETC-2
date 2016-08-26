@@ -22,11 +22,11 @@ public partial class User_Tag : System.Web.UI.Page
   
             if (Session["RoleID"] != null && !String.IsNullOrEmpty(Session["RoleID"].ToString()) && (Session["RoleID"].ToString() == "1" || Session["RoleID"].ToString() == "2"))
             {
-                ClassifyPanel.Visible = true;
+                //ClassifyPanel.Visible = true;
             }
             else 
             {
-                ClassifyPanel.Visible = false;
+                //ClassifyPanel.Visible = false;
             }
           
             using (SqlConnection conn = new DB().GetConnection()) 
@@ -54,23 +54,23 @@ public partial class User_Tag : System.Web.UI.Page
         string UserID = Convert.ToString(Session["UserID"]);
         string username = Convert.ToString(Session["UserName"]);
         int a = 0;
-        if (CheckRole.Checked)
-        {
-            a = 1;
-        }
-        else if (PublishDepartment.Checked)
-        {
-            a = 0;
-        }
+        //if (CheckRole.Checked)
+        //{
+        //    a = 1;
+        //}
+        //else if (PublishDepartment.Checked)
+        //{
+        //    a = 0;
+        //}
         using (SqlConnection conn = new DB().GetConnection())
         {
             
-            StringBuilder sb = new StringBuilder("insert into UserTags(TagName,Description,Classify,UserID,UserName )");
-            sb.Append(" values ( @TagName,@Description,@Classify,@UserID,@UserName ) ");
+            StringBuilder sb = new StringBuilder("insert into UserTags(TagName,Description,UserID,UserName )");
+            sb.Append(" values ( @TagName,@Description,@UserID,@UserName ) ");
             SqlCommand cmd = new SqlCommand(sb.ToString(), conn);
             cmd.Parameters.AddWithValue("@TagName", TagName.Text);
             cmd.Parameters.AddWithValue("@Description", TagDescription.Text);
-            cmd.Parameters.AddWithValue("@Classify", a);
+            //cmd.Parameters.AddWithValue("@Classify", a);
             cmd.Parameters.AddWithValue("@UserID", UserID);
             cmd.Parameters.AddWithValue("@UserName", username);
             conn.Open();
@@ -79,8 +79,8 @@ public partial class User_Tag : System.Web.UI.Page
             Response.Write("<script language='javascript'> alert('操作成功');</script>");
             TagName.Text = "";
             TagDescription.Text = "";
-            CheckRole.Checked = false;
-            PublishDepartment.Checked = false;
+            //CheckRole.Checked = false;
+            //PublishDepartment.Checked = false;
         }
     }
 

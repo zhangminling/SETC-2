@@ -1,7 +1,8 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/User.master" AutoEventWireup="true" CodeFile="User_Password.aspx.cs" Inherits="User_Password" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">           
 <div id="CurrentPosition">当前位置：<a href="User_Man.aspx">用户管理</a> >> <a href="User_Password.aspx">修改密码</a></div>
-                  
+           <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+         <ContentTemplate>              
           <div class="register-container animated fadeInDown">
         <div class="registerbox bg-white">
             <p class="text-info" style="font-size:20px;padding:10px 130px;">修改密码</p>
@@ -33,12 +34,16 @@
            </div>
           <div class="registerbox-submit">
                <asp:Label ID="ErrorLabel" runat="server" Text="" Font-Bold="true" ForeColor="Red"></asp:Label>
+          
                <asp:CheckBox ID="CheckBox1" runat="server" AutoPostBack="true"
                 oncheckedchanged="CheckBox1_CheckedChanged" Text="显示密码" Visible="true" />  
-               <asp:Button ID="Button1" runat="server" class="btn btn-primary pull-right" Text=" 修改用户密码 " 
+            
+               <asp:Button ID="Button1" runat="server" class="btn btn-info pull-right" Text=" 确定修改 " 
                 onclick="Button1_Click" />
             </div>
         </div>
     </div>
+     </ContentTemplate>
+                   </asp:UpdatePanel>
 </asp:Content>
 

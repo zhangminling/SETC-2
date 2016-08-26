@@ -32,6 +32,17 @@ public partial class ArticleTag_ArDel : System.Web.UI.Page
                        TagName.Text = rd["TagName"].ToString();
                    }
                    rd.Close();
+
+
+                   cmd.CommandText = "select count(*) as maxrow from [Articles_ArticleTags] where ArticleTagID= @TagID1";
+                   cmd.Parameters.AddWithValue("@TagID1", TagID.Text);
+                   SqlDataReader rd1 = cmd.ExecuteReader();
+                   if (rd1.Read())
+                   {
+                       Count.Text = rd1["maxrow"].ToString();
+                   }
+                   rd1.Close();
+                   
                   MyDataBind();
                }
            }  
@@ -143,6 +154,65 @@ public partial class ArticleTag_ArDel : System.Web.UI.Page
         MyDataBind();
     }
 
+
+    protected void ArDelBtn_Click(object sender, EventArgs e)
+    {
+       
+        string ids = "";
+        for (int i = 0; i <= GridView2.Rows.Count - 1; i++)
+        {
+            CheckBox checkBox = (CheckBox)GridView2.Rows[i].FindControl("ChechBox1");
+            if (checkBox.Checked == true)
+            {
+                ids += "," + GridView2.DataKeys[i].Value;
+            }
+        }
+        if (!String.IsNullOrEmpty(ids))
+        {
+            ids = ids.Substring(1);
+            IDS.Text = ids;
+            string[] array = ids.Split(',');
+            int k = array.Length;
+            string count = Count.Text;
+            using (SqlConnection conn = new DB().GetConnection())
+            {
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "Delete from Articles_ArticleTags where ArticleTagID=@TagID1 and ID in ("+IDS.Text+") ";
+                cmd.Parameters.AddWithValue("@TagID1", TagID.Text);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+
+                int Articles = Convert.ToInt32(count);
+                Articles = Articles - k;
+
+
+
+                cmd.CommandText = "update ArticleTags set Articles= @Articles where ID=@ID";
+                cmd.Parameters.AddWithValue("@ID", TagID.Text);
+                cmd.Parameters.AddWithValue("@Articles", Articles);
+                cmd.ExecuteNonQuery();
+
+
+                MyDataBind();
+ 
+
+                conn.Close();
+
+            }
+           
+          
+        }
+        else {
+            Response.Write("<script language='javascript'> alert('至少选择一项');</script>");
+        }
+    
+    
+    
+    
+    
+    
+    }
 
 
 

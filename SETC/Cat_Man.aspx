@@ -1,53 +1,68 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/User.master" AutoEventWireup="true" CodeFile="Cat_Man.aspx.cs" Inherits="Cat_Man" %>
+Ôªø<%@ Page Title="" Language="C#" MasterPageFile="~/User.master" AutoEventWireup="true" CodeFile="Cat_Man.aspx.cs" Inherits="Cat_Man" %>
+<%@ Register TagPrefix="UserControl" TagName="Cat_Man1" Src="~/Cat_Man1.ascx" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <style type="text/css">
+        .Cat {
+            padding-left: 0px;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            margin-top: 5px;
+            border-bottom: 2px solid #2dc3e8;
+        }
+        .Cat H3 {
+            height: 24px;
+            line-height: 24px;
+            color: #04377c;
+            text-indent: 20px;
+            background-image: url(images/vbar_blue.png);
+            background-repeat: no-repeat;
+        }
+    </style>
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <!-- ÂΩìÂâç‰ΩçÁΩÆ -->
+    <asp:Label ID="CategoryIDLabel" runat="server" Text="Label" Visible="false"></asp:Label>
     <asp:Label ID="IDSLabel" runat="server" Text="" Visible="false"></asp:Label>
-    <div id="CurrentPosition"><h4>µ±«∞Œª÷√£∫</h4><span><a href="Cat_Man.aspx"><h4>∑÷¿‡π‹¿Ì&nbsp;&nbsp;>></h4></a></span></div>
-<div>
-    <div align="left">
-        <asp:TextBox ID="TbSearch" runat="server" Height="37px" Width="228px" ></asp:TextBox>&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="BtSearch" runat="server"  Text="À—À˜" Width="84px"  Height="34px"/>
+    <div id="CurrentPosition">ÂΩìÂâç‰ΩçÁΩÆÔºö<a href="Cat_Man.aspx">ÂàÜÁ±ªÁÆ°ÁêÜ</a></div>
+    <div class="page-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="widget">
+                    <div class="widget-header ">
+                        <span class="widget-caption">ÂàÜÁ±ªÁÆ°ÁêÜ</span>
+                    </div>
+                    <div class="widget-body">
+                        <div style="margin-top: 20px;"></div>
+                        <div align="left">
+                            <asp:Button ID="CatAdd" runat="server" Text="Êñ∞Â¢û‰∏ÄÁ∫ßÂàÜÁ±ª" Height="32px" class="btn btn-info" OnClick="Button3_Click" />&nbsp;&nbsp;&nbsp;
+                            <asp:Button ID="SubAdd" runat="server" Text="Êñ∞Â¢û‰∫åÁ∫ßÂàÜÁ±ª" Height="32px" class="btn btn-info" OnClick="Button4_Click" />&nbsp;&nbsp;&nbsp;
+                        </div>
+                        <!-- ÊòæÁ§∫‰∏ªÊ†èÁõÆÂàóË°® -->
+                        <asp:Panel ID="Panel2" runat="server">
+                            <asp:Repeater ID="Repeater1" runat="server">
+                                <ItemTemplate>
+                                    <div class="Cat">
+                                        <h3><a href='Cat_Edit.aspx?ID=<%# Eval("ID") %>'><%# Eval("CatName") %></a></h3>
+                                        <div style="float: right; margin-top: -30px;margin-bottom:8px; margin-right:29px;">
+                                            <a href='Cat_Edit.aspx?ID=<%# Eval("ID") %>' class="btn btn-default"><%# Eval("Valid") %></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href='Cat_Edit.aspx?ID=<%# Eval("ID") %>' class="btn btn-info">ÁºñËæë</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href='Cat_Del.aspx?ID=<%# Eval("ID") %>' class="btn btn-danger">Âà†Èô§</a>
+                                        </div>
+                                        <div>
+                                            <UserControl:Cat_Man1 ID="UC_Article_List1" runat="server" CatID='<%# Eval("ID") %>' />
+                                        </div>
+                                        <%--<div style="float: right; height: 30px; line-height: 30px;">
+                                            <a href='Cat_Edit.aspx?ID=<%# Eval("ID") %>'></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>--%>
+                                        <!-- <img src="images/random/H1.jpg" /> -->
+                                    </div>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                        </asp:Panel>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    &nbsp;&nbsp;&nbsp;
-    <div align="left"> 
-            <asp:Button ID="CatAdd" runat="server"  Text="–¬‘ˆ“ªº∂∑÷¿‡" Height="32px" CssClass="Button" onclick="Button3_Click"/>&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="SubAdd" runat="server"  Text="–¬‘ˆ∂˛º∂∑÷¿‡"  Height="32px" CssClass="Button" onclick="Button4_Click"/>&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="Man" runat="server"  Text="±‡º≠" Width="65px"  Height="32px" CssClass="Button" onclick="Button2_Click"/>&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="Del" runat="server"  Text="…æ≥˝" Width="65px"  Height="32px" CssClass="Button" OnClick="ButtonDel_Click" />&nbsp;&nbsp;&nbsp;
-       </div>
-    <div align="center"><asp:Label ID="ResultLabel" runat="server" Font-Bold="True" ForeColor="#00CC00"></asp:Label></div>
- 
-    &nbsp;&nbsp;&nbsp;
-
-    <div align="center">
-        <asp:GridView ID="GridView1" runat="server" DataKeyNames="ID" AutoGenerateColumns="false" CellPadding="4" ForeColor="#333333" GridLines="None" Width="99%" 
-        Font-Size="14px" Font-Underline="False">
-    <RowStyle BackColor="#F7F6F3" ForeColor="#333333" Height="30px" HorizontalAlign="Center" />
-    <HeaderStyle HorizontalAlign="Center" />
-<Columns>
-    <asp:TemplateField HeaderText="–Ú" HeaderStyle-HorizontalAlign="Center">
-        <ItemTemplate>
-            <asp:Label ID="lblNo" runat="server" Text='<%# Container.DataItemIndex+1 %>'></asp:Label>
-        </ItemTemplate>
-        <ItemStyle Width="20px" HorizontalAlign="center"/>
-        <HeaderStyle Width="20px" />
-    </asp:TemplateField>
-    <asp:TemplateField>
-    <ItemTemplate>
-    <asp:CheckBox ID="ChechBox1" runat="server" />    
-    </ItemTemplate>
-    <ItemStyle  HorizontalAlign="Center" />
-    </asp:TemplateField>    
-    <asp:BoundField DataField="CatName" HeaderText="¿∏ƒø√˚≥∆" SortExpression="CatName" ItemStyle-HorizontalAlign="left" />
-    <asp:BoundField DataField="Subs" HeaderText="◊”¿∏ƒø ˝" SortExpression="Subs"  ItemStyle-HorizontalAlign="center" />
-    <asp:BoundField DataField="Valid" HeaderText="”––ß" SortExpression="Valid" ItemStyle-HorizontalAlign="left" /> 
-    <asp:BoundField DataField="Description" HeaderText="¿∏ƒø√Ë ˆ" SortExpression="Description"  ItemStyle-HorizontalAlign="left" />                                 
-
-    </Columns>
-    <HeaderStyle BackColor="#2dc3e8" Font-Bold="True" ForeColor="White"  Height="30px"/>
-    <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
-</asp:GridView>
 </asp:Content>
-

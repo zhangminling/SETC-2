@@ -1,21 +1,70 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Text;
-
-
-
+using System.IO;
 
 public partial class Cat_Add : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack)
+        if (!IsPostBack) 
         {
-            using (SqlConnection conn = new DB().GetConnection())
+            CatName.Focus();
+            if (!String.IsNullOrEmpty(Request["ID"]))
             {
+                using (SqlConnection conn = new DB().GetConnection())
+                {
+                    SqlCommand cmd = conn.CreateCommand();
+                    string sql = "select * from cats order by valid desc,Orders desc;select * from Cats where ID = @ID";
+                    cmd.CommandText = sql;
+                    cmd.Parameters.AddWithValue("@ID", Convert.ToInt16(Request["ID"]));
+                    conn.Open();
+                    SqlDataReader rd = cmd.ExecuteReader();
+                    
+                    rd.NextResult();
+                    if (rd.Read())
+                    {
+                      
+                        CatName.Text = rd["CatName"].ToString();
+                        Description.Text = rd["Description"].ToString();
+                        
+                        
+                        Description.Text = rd["Description"].ToString();
+                        int i = Convert.ToInt16(rd["Valid"]);
+                        
+                    }
+                    rd.Close();
+                    conn.Close();
+                }
+            }
+            else
+            {
+                MyDataBind();
+            }
+
+        }
+    }
+
+    protected void MyDataBind()
+    {
+        using (SqlConnection conn = new DB().GetConnection())
+        {
+            SqlCommand cmd = conn.CreateCommand();
+            string sql = "select * from cats order by valid desc,Orders desc;";
+            cmd.CommandText = sql;
+            conn.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+            
+            rd.Close();
+            conn.Close();
+        }
+          //using (sqlconnection conn = new db().getconnection()) 
+          //{
                 //string sql = "select * from Cats order by ID desc";
                 //SqlCommand cmd = new SqlCommand(sql, conn);
                 //conn.Open();
@@ -34,15 +83,11 @@ public partial class Cat_Add : System.Web.UI.Page
                 //        false1.Checked = true;
                 //    }
                 //}
-            }
-        }
-
-
-
-    }
+            //}
+        }              
+    
     protected void ButtonSave_Click(object sender, EventArgs e)
     {
-
         int i;
         /*SqlConnection conn = new SqlConnection(@"server=QH-20160713TJQE\SQLEXPRESS;database=SETC;Trusted_Connection=True");
         string Sql = "INSERT INTO Cats (CatName,Description) values ('" + CatName.Text + "','" + Description.Text + "')";
@@ -69,7 +114,7 @@ public partial class Cat_Add : System.Web.UI.Page
             }
             cmd.Parameters.AddWithValue("@Valid", radiobuttonvalue);
             conn.Open();
-            i = cmd.ExecuteNonQuery();
+            i=cmd.ExecuteNonQuery();
             conn.Close();
             if (i == 1)
             {
@@ -79,9 +124,8 @@ public partial class Cat_Add : System.Web.UI.Page
             {
                 Response.Write("<script language='javascript'> alert('操作失败，请重试！');window.location='Cat_Man.aspx';</script>");
             }
-
+           
         }  
-
     }
 
     protected void Button4_Click(object sender, EventArgs e)

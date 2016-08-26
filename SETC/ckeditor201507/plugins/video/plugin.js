@@ -169,17 +169,17 @@ CKEDITOR.plugins.add( 'video',
 
 
 var en = {
-		toolbar	: 'Video',
-		dialogTitle : 'Video properties',
+    toolbar: '插入视频外部链接',
+		dialogTitle : '插入视频外部链接',
 		fakeObject : 'Video',
 		properties : 'Edit video',
-		widthRequired : 'Width field cannot be empty',
-		heightRequired : 'Height field cannot be empty',
-		poster: 'Poster image',
-		sourceVideo: 'Source video',
-		sourceType : 'Video type',
+		widthRequired : '宽度不能为空',
+		heightRequired: '高度不能为空',
+		poster: '封面图链接（可为空）',
+		sourceVideo: '视频链接',
+		sourceType : '视频类型',
 		linkTemplate :  '<a href="%src%">%type%</a> ',
-		fallbackTemplate : 'Your browser doesn\'t support video.<br>Please download the file: %links%'
+		fallbackTemplate : '你的浏览器不支持播放该视频。<br>请下载后再观看: %links%'
 	};
 
 var es = {

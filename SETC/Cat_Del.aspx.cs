@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
+using System.Text;
+using System.IO;
 
 public partial class Cat_Del : System.Web.UI.Page
 {
@@ -12,12 +14,15 @@ public partial class Cat_Del : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            IDSLabel.Text = Request.QueryString["ID"]; 
             if (Request.QueryString["IDS"] != null)
             {
                 IDSLabel.Text = Request.QueryString["IDS"].ToString();
-                MyInit();
+              
             }
-        }
+        }  MyInit();
+        
+
     }
 
     private void MyInit()

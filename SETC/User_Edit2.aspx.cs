@@ -17,8 +17,9 @@ public partial class User_Edit2 : System.Web.UI.Page
             int updateavatar = Util.UpdateAvatar(username);
             Image1.ImageUrl = Session["Avatar"].ToString();
             LabelUserID.Text = Request.QueryString["ID"];
-            if (Session["RoleID"] != null && !String.IsNullOrEmpty(Session["RoleID"].ToString()) && (Session["RoleID"].ToString() == "1" || Session["RoleID"].ToString() == "2"))
+        if (Session["RoleID"] != null && !String.IsNullOrEmpty(Session["RoleID"].ToString()) && (Session["RoleID"].ToString() == "1" || Session["RoleID"].ToString() == "2"))
             {
+              
                 Role.Enabled = true;
                 PasswordPanel.Visible = true;
                 init();
@@ -28,53 +29,56 @@ public partial class User_Edit2 : System.Web.UI.Page
                 Role.Enabled = false;
                 RolePanel.Visible = false;
                 PasswordPanel.Visible = false;
+                ValidPanel.Visible = false;
             }
-            using (SqlConnection conn = new DB().GetConnection()) 
+        using (SqlConnection conn = new DB().GetConnection())
+        {
+            string sql = "select * from Roles order by ID asc";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            conn.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+            Role.DataSource = rd;
+            Role.DataTextField = "RoleName";
+            Role.DataValueField = "ID";
+            Role.DataBind();
+            rd.Close();
+
+
+
+            cmd.CommandText = "Select * from [Users] where ID = @UserID";
+            cmd.Parameters.AddWithValue("@UserID", LabelUserID.Text);
+            rd = cmd.ExecuteReader();
+            if (rd.Read())
             {
-                string sql = "select * from Roles order by ID asc";
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                conn.Open();
-                SqlDataReader rd = cmd.ExecuteReader();
-                Role.DataSource = rd;
-                Role.DataTextField = "RoleName";
-                Role.DataValueField = "ID";
-                Role.DataBind();
-                rd.Close();
-
-               
-
-                cmd.CommandText = "Select * from [Users] where ID = @UserID";
-                cmd.Parameters.AddWithValue("@UserID", LabelUserID.Text);
-                rd = cmd.ExecuteReader();
-                if (rd.Read())
+                Label1.Text = rd["UserName"].ToString();
+                TrueName.Text = rd["TrueName"].ToString();
+                Email.Text = rd["Email"].ToString();
+                Image1.ImageUrl = rd["Avatar"].ToString();
+                TelePhone.Text = rd["TelePhone"].ToString();
+                string roleID = rd["RoleID"].ToString();
+                if (Role.Items.FindByValue(roleID) != null)
                 {
-                    Label1.Text = rd["UserName"].ToString();
-                    TrueName.Text = rd["TrueName"].ToString();
-                    Email.Text = rd["Email"].ToString();
-                    Image1.ImageUrl = rd["Avatar"].ToString();
-                    TelePhone.Text = rd["TelePhone"].ToString();
-                    string roleID = rd["RoleID"].ToString();
-                    if (Role.Items.FindByValue(roleID) != null)
-                    {
-                        Role.ClearSelection();
-                        Role.Items.FindByValue(roleID).Selected = true;
-                    }
-                    int valid = Convert.ToInt32(rd["Valid"]);
-                    if (valid == 1)
-                    {
-                        true1.Checked = true;
-                    }
-                    else 
-                    {
-                        false1.Checked = true;
-                    }
-                    
-                    Status.Text = rd["Status"].ToString();
-                    RegisterDateTime.Text = rd["RegisterDateTime"].ToString();
-                    LastLoginDateTime.Text = rd["LastLoginDateTime"].ToString();
+                    Role.ClearSelection();
+                    Role.Items.FindByValue(roleID).Selected = true;
                 }
-                rd.Close();
+                int valid = Convert.ToInt32(rd["Valid"]);
+                if (valid == 1)
+                {
+                    true1.Checked = true;
+                }
+                else
+                {
+                    false1.Checked = true;
+                }
+
+                Status.Text = rd["Status"].ToString();
+                RegisterDateTime.Text = rd["RegisterDateTime"].ToString();
+                LastLoginDateTime.Text = rd["LastLoginDateTime"].ToString();
             }
+            rd.Close();
+        }
+           
+         
         }
     }
 
@@ -173,6 +177,9 @@ public partial class User_Edit2 : System.Web.UI.Page
     {
         ErrorLabel.Text = "";
         int i = 0;
+        string username = Convert.ToString(Session["UserName"]);
+        string userid = Convert.ToString(Session["UserID"]);
+        string ip = Request.UserHostAddress;//IP地址
         using (SqlConnection conn = new DB().GetConnection()) 
         {
             string sql = "Update [Users] set TrueName=@TrueName,Email = @Email,RoleID = @RoleID,RoleName = @RoleName,Valid=@Valid,TelePhone = @TelePhone,Status = @Status where ID = @UserID";
@@ -200,6 +207,8 @@ public partial class User_Edit2 : System.Web.UI.Page
         }
         if (i == 1)
         {
+            string newTagName = "用户名为“" + username + "”的信息";
+            Util.UserUtil_Notes("更改了Id为", Convert.ToInt32(userid), newTagName, username, "User_Edit2.aspx", ip);
             ErrorLabel.Text = "用户信息更新成功！";
         }
         else

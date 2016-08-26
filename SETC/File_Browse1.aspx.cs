@@ -87,6 +87,15 @@ public partial class File_Browse1 : System.Web.UI.Page
             rd.Close();
             ResourceTypeDDL.Items.Insert(0, new ListItem("所有资源类型", ""));
 
+            cmd.CommandText = "Select * from ResourceFolders where ParentFolderID = '0' order by ID asc";
+            rd = cmd.ExecuteReader();
+            FolderDDL.DataSource = rd;
+            FolderDDL.DataValueField = "ID";
+            FolderDDL.DataTextField = "FolderName";
+            FolderDDL.DataBind();
+            rd.Close();
+            FolderDDL.Items.Insert(0, new ListItem("所有文件夹", "-1"));
+
             // RoleID=1,2,3,4，分别对应Administrator,Editor,Contributor,Author
             int RoleID = Convert.ToInt16(Session["RoleID"].ToString());
             if (RoleID == 1 || RoleID == 2)
@@ -115,7 +124,7 @@ public partial class File_Browse1 : System.Web.UI.Page
     {
         AspNetPager1.PageSize = Convert.ToInt16(PageSizeDDL.SelectedValue);
         string param = SearchTB.Text;
-        StringBuilder whereStr = new StringBuilder(" where 1= 1 ");
+        StringBuilder whereStr = new StringBuilder(" where Valid=1 ");
         if (!String.IsNullOrEmpty(param))
         {
             whereStr.Append(" and [ResourceName] like '%").Append(Server.HtmlEncode(param.Trim().Replace("'", ""))).Append("%' ");
@@ -127,6 +136,10 @@ public partial class File_Browse1 : System.Web.UI.Page
         if (Convert.ToInt16(AuthorDDL.SelectedValue) > 0)
         {
             whereStr.Append(" and UserID = ").Append(AuthorDDL.SelectedValue);
+        }
+        if (Convert.ToInt16(FolderDDL.SelectedValue) > 0)
+        {
+            whereStr.Append(" and FolderID = ").Append(FolderDDL.SelectedValue);
         }
 
         string sql = "select count(ID) as total from Resources " + whereStr.ToString();
@@ -202,29 +215,35 @@ public partial class File_Browse1 : System.Web.UI.Page
                 //将媒体库里选择的图片在页面中显示出来
                 if (ResourceTypeLabel.Text.Equals("图片"))
                 {
-                    insertFileHTML = "<img src='" + filePath + "' />";
+                    insertFileHTML = "<img src='" + filePath + "' width='640' />";
                 }
                 if (ResourceTypeLabel.Text.Equals("文档") || ResourceTypeLabel.Text.Equals("压缩"))
                 {
                     insertFileHTML = "<a href=\'" + filePath + "\'>" + TextBox1.Text + "</a>";
                 }
 
-                if (ResourceTypeLabel.Text.Equals("视频") || ResourceTypeLabel.Text.Equals("音频"))
-                {
+                //if (ResourceTypeLabel.Text.Equals("视频") || ResourceTypeLabel.Text.Equals("音频"))
+                //{
                 //  insertFileHTML = "<div id='mediaplayer' mediaURL='" + filePath + "'>Media Player</div>";
-                    insertFileHTML = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' height='480' width='640'><param name='movie' value='/ckeditor201507/plugins/jwplayer/jwplayer/player.swf' /><param name='allowfullscreen' value='true' /><param name='allowscriptaccess' value='always' /><param name='flashvars' value='file=/" + filePath + "&amp;autostart=false' /><embed allowfullscreen='true' allowscriptaccess='always' flashvars='file=/" + filePath + "&amp;autostart=false' height='480' id='player1' name='player1' src='/ckeditor201507/plugins/jwplayer/jwplayer/player.swf' width='640'></embed></object>";
-                }
-                //if (ResourceTypeLabel.Text.Equals("视频"))
-                //{
-                //    insertFileHTML = "<video src='" + filePath + "' controls='controls'>出错</video>";
+                //   insertFileHTML = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' height='480' width='640'><param name='movie' value='/ckeditor201507/plugins/jwplayer/jwplayer/player.swf' /><param name='allowfullscreen' value='true' /><param name='allowscriptaccess' value='always' /><param name='flashvars' value='file=/" + filePath + "&amp;autostart=false' /><embed allowfullscreen='true' allowscriptaccess='always' flashvars='file=/" + filePath + "&amp;autostart=false' height='480' id='player1' name='player1' src='/ckeditor201507/plugins/jwplayer/jwplayer/player.swf' width='640'></embed></object>";
+                //}
+                if (ResourceTypeLabel.Text.Equals("视频"))
+                {
+                    insertFileHTML = "<div class='jw-settings' id='jws" + new Random().Next(10, 100).ToString() + "'><video id='v"+new Random().Next(10, 100).ToString() + "' preload='none'><source src='" + filePath + "' type='video/mp4' /></video><div class='jw-modes'><div class='jw-mode' data-type='html5' style='display: none;'></div><div class='jw-mode' data-type='flash' style='display: none;'></div></div></div><p>&nbsp;</p>";
                     
-                //}
-                //if (ResourceTypeLabel.Text.Equals("音频"))
-                //{
-                //    insertFileHTML = "<audio src='" + filePath + "' controls='controls'>出错</audio>";
-                //}
+                }
+                if (ResourceTypeLabel.Text.Equals("音频"))
+                {
+                    insertFileHTML = "<div><audio src='" + filePath + "' controls='controls'>出错</audio></div><p>&nbsp;</p>";
+                }
+                if (ResourceTypeLabel.Text.Equals("Flash"))
+                {
+                    insertFileHTML = "<p><object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0' height='480' width='640'><param name='allowFullScreen' value='false' /><param name='loop' value='false' /><param name='play' value='false' /><param name='quality' value='high' /><param name='scale' value='showall' /><param name='movie' value='" + filePath + "' /><embed allowfullscreen='false' height='480' loop='false' play='false' pluginspage='http://www.macromedia.com/go/getflashplayer' quality='high' scale='showall' src='" + filePath + "' type='application/x-shockwave-flash' width='640'></embed></object></p>";
+                }
                 conn.Close();
             }
+            //执行前台js代码中已定义的ckeditor()插入函数（Asp.net 后台调用js方法）
+            ClientScript.RegisterStartupScript(this.GetType(), "ckeditorscript", "<script> ckeditor();</script>");
         }
         
     }
@@ -250,6 +269,10 @@ public partial class File_Browse1 : System.Web.UI.Page
         MyDataBind();
     }
     protected void AspNetPager1_PageChanged(object sender, EventArgs e)
+    {
+        MyDataBind();
+    }
+    protected void FolderDDL_SelectedIndexChanged(object sender, EventArgs e)
     {
         MyDataBind();
     }

@@ -13,13 +13,14 @@ public partial class User_Add : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        
         if (!IsPostBack)
         {
         UserName.Focus();
-       
+      
         using (SqlConnection conn = new DB().GetConnection())
         {
-            string userid = Convert.ToString(Session["UserID"]);
+           
             string sql1 = "select * from Roles order by ID asc";
             SqlCommand cmd1 = new SqlCommand(sql1, conn);
             conn.Open();
@@ -29,31 +30,25 @@ public partial class User_Add : System.Web.UI.Page
             Role.DataValueField = "ID";
             Role.DataBind();
             rd1.Close();
-
-            string sql = "select * from UserTags where UserID = @UserID order by ID desc";
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@UserID", userid);
-            SqlDataReader rd = cmd.ExecuteReader();
-            TagsList.DataSource = rd;
-            TagsList.DataTextField = "TagName";
-            TagsList.DataValueField = "ID";
-            TagsList.DataBind();
-            rd.Close();
+ 
         }
       
         }
     }
-  
 
-    protected void Button1_Click(object sender, EventArgs e)
+
+    private void AddNewUser() 
     {
+
+        string username = Convert.ToString(Session["UserName"]);
+        string IP = Request.UserHostAddress;//IP地址
         ErrorLabel.Text = "";
         int i = 0;
         string p = Password.Text.Trim();
         using (SqlConnection conn = new DB().GetConnection()) 
         {
-            StringBuilder sb = new StringBuilder("insert into [Users]( UserName,TrueName,Password,Email,TelePhone,Status,RoleID,RoleName,RegisterDateTime,LastLoginDateTime,Valid)");
-            sb.Append(" values ( @UserName,@TrueName,@Password,@Email,@TelePhone,@Status,@RoleID,@RoleName,@RegisterDateTime,@LastLoginDateTime,@Valid ) ");
+            StringBuilder sb = new StringBuilder("insert into [Users]( UserName,TrueName,Password,Email,TelePhone,Status,RoleID,RoleName,Valid,RandomID)");
+            sb.Append(" values ( @UserName,@TrueName,@Password,@Email,@TelePhone,@Status,@RoleID,@RoleName,@Valid,@RandomID ) ");
             SqlCommand cmd = new SqlCommand(sb.ToString(), conn);
             cmd.Parameters.AddWithValue("@UserName", UserName.Text.Trim());
             cmd.Parameters.AddWithValue("@TrueName", TrueName.Text.Trim());
@@ -63,11 +58,9 @@ public partial class User_Add : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@Status", Status.Text);
             cmd.Parameters.AddWithValue("@RoleID", Role.SelectedValue);
             cmd.Parameters.AddWithValue("@RoleName", Role.SelectedItem.Text);
-            cmd.Parameters.AddWithValue("@RegisterDateTime", DateTime.Now);
-            cmd.Parameters.AddWithValue("@LastLoginDateTime", DateTime.Now);
             cmd.Parameters.AddWithValue("@Valid", 1);
-
-            StringBuilder sb1 = new StringBuilder("insert into [Users_UserTags]( UserName,TrueName,Password,Email,TelePhone,Status,RoleID,RoleName,RegisterDateTime,LastLoginDateTime,Valid)");
+            RandomID.Text = Guid.NewGuid().ToString();
+            cmd.Parameters.AddWithValue("@RandomID", RandomID.Text);
             conn.Open();
             i=cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -76,14 +69,75 @@ public partial class User_Add : System.Web.UI.Page
         }
         if (i == 1)
         {
+            string addUserName = "个用户名为“" + UserName.Text.Trim() + "”的用户";
+            Util.UserUtil_Notes("成功增加了", 1, addUserName, username, "User_Add.aspx", IP);
             ErrorLabel.Text = "用户信息更新成功！";
-            RegisterDateTime.Text = DateTime.Now.ToString();
-            LastLoginDateTime.Text = DateTime.Now.ToString();
+            Response.Redirect("User_Avatar.aspx?RandomID=" + RandomID.Text);
         }
         else
         {
             ErrorLabel.Text = "用户信息更新失败，请重试！";
         }
     }
-  
+
+    private string Check()
+    {
+        int i = 0;
+        string[] s = new string[6];
+        s[0] = "";
+        s[1] = "标签名不能为空！";
+        s[4] = "标签名已经存在，请输入另外一个标签名！";
+
+        string TagNameStr = UserName.Text;
+        if (!String.IsNullOrEmpty(TagNameStr))
+        {
+            if (AlreadyExisted(TagNameStr.Trim()))
+            {
+                i = 4;//第五种情况，用户名已经存在
+            }
+            else
+            {
+                DataBind();
+
+            }
+
+        }
+        else
+        {
+            i = 1;//第二种情况，用户名密码为空
+        }
+        return s[i];
+    }
+
+    private bool AlreadyExisted(string param)
+    {
+        bool a = false;
+
+        using (SqlConnection conn = new DB().GetConnection())
+        {
+            string sql = "select id from [Users] where UserName = @UserName";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@UserName", param);
+            conn.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                a = true;
+            }
+            rd.Close();
+        }
+        return a;
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+
+        Label2.Text = Check();
+        if (Label2.Text == "")
+        {
+            AddNewUser();
+        }
+      
+    }
+
 }

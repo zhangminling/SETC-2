@@ -20,6 +20,9 @@ public partial class User_Password : System.Web.UI.Page
     protected void Button1_Click(object sender, EventArgs e)
     {
         int i = 0;
+        string userid = Convert.ToString(Session["UserID"]);
+        string username = Convert.ToString(Session["UserName"]);
+        string ip = Request.UserHostAddress;//IP地址
         string[] s = new string[7];
         s[0] = "密码更新失败，请与管理员联系！";
         s[1] = "密码更新成功！"; 
@@ -49,6 +52,10 @@ public partial class User_Password : System.Web.UI.Page
                 if(pw2.Equals(pw3))
                 {
                     i = DoUpdate();
+                    string newTagName = "用户名为“" + username + "”的密码";
+                    Util.UserUtil_Notes("更新了Id为", Convert.ToInt32(userid), newTagName, username, "User_Password.aspx", ip);
+               
+
                 }
                 else
                 {
@@ -100,6 +107,8 @@ public partial class User_Password : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@Password", Util.GetHash(Password2.Text.Trim()));
                 cmd.Parameters.AddWithValue("@UserID2", Session["UserID"].ToString());
                 i = cmd.ExecuteNonQuery();
+                ErrorLabel.Text = "修改成功";
+              
             }
             else
             {

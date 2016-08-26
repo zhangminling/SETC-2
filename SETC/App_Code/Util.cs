@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
+using System.Text;
+using System.IO;
+using System.Configuration;
+
 /// <summary>
 ///Util 的摘要说明
 /// </summary>
@@ -105,6 +111,32 @@ public class Util
         System.Web.HttpContext.Current.Response.Write("<script>alert('" + words + "');</script>");
         System.Web.HttpContext.Current.Response.Write("<script>location.href='" + location + "';</script>");
 
+    }
+
+    //记录用户操作历史
+    public static void UserUtil_Notes(string utilwords,int i,string entitywords,string UserName,string VisitPage,string UserIP) 
+    {
+         string datetime = DateTime.Now.ToString();
+        StringBuilder MyStringBuilder = new StringBuilder();
+        MyStringBuilder.Append(utilwords);
+        MyStringBuilder.Append(i);
+        MyStringBuilder.Append(entitywords);
+        string finalwords = MyStringBuilder.ToString();
+        using (SqlConnection conn = new DB().GetConnection())
+        {
+            StringBuilder sb = new StringBuilder("insert into [UserUtil_Notes]( Util,UserName,VisitPage,VisitDatetime,UserIP)");
+            sb.Append(" values ( @Util,@UserName,@VisitPage,@VisitDatetime,@UserIP) ");
+            SqlCommand cmd = new SqlCommand(sb.ToString(), conn);
+            cmd.Parameters.AddWithValue("@Util", finalwords);
+            cmd.Parameters.AddWithValue("@UserName", UserName);
+            cmd.Parameters.AddWithValue("@VisitPage", VisitPage);
+            cmd.Parameters.AddWithValue("@VisitDatetime", datetime);
+            cmd.Parameters.AddWithValue("@UserIP", UserIP);
+            conn.Open();
+            i = cmd.ExecuteNonQuery();
+            cmd.Dispose();
+
+        }
     }
 
     // 用户登录，失败返回-1，成功返回RoleID
@@ -209,9 +241,11 @@ public class Util
             SqlDataReader rd = cmd.ExecuteReader();
             if (rd.Read())
             {
-
+                roleID = Convert.ToInt16(rd["RoleID"]);
+                System.Web.HttpContext.Current.Session["RoleID"] = roleID;
+                System.Web.HttpContext.Current.Session["RoleName"] = rd["RoleName"].ToString();
                 System.Web.HttpContext.Current.Session["Avatar"] = rd["Avatar"].ToString();
-
+          
 
             }
             cmd.Dispose();

@@ -47,6 +47,7 @@ public partial class File_Move : System.Web.UI.Page
     protected void Button1_Click(object sender, EventArgs e)
     {
         int i = 0;
+        int rowNo = 0;
         using (SqlConnection conn = new DB().GetConnection())
         {
             string sql = "Update [Resources] set FolderID=@FolderID,FolderName=@FolderName where ID in (" + IDSLabel.Text + ")";
@@ -56,15 +57,26 @@ public partial class File_Move : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@FolderName", FolderDDL.SelectedItem.Text);
             conn.Open();
             i = cmd.ExecuteNonQuery();
+            
+
+            foreach (GridViewRow row in GridView1.Rows)
+            {
+                string hidecolum_folderidN = GridView1.DataKeyNames[0];
+                int hidecolum_folderidValue = (int)GridView1.DataKeys[rowNo].Value;
+                cmd.CommandText = "Update ResourceFolders set Counts = Counts-1 where ID = " + hidecolum_folderidValue.ToString() + "  ;Update ResourceFolders set Counts = Counts+1 where ID =@FolderID";
+                cmd.ExecuteNonQuery();
+                rowNo++;
+            }
+
             cmd.Dispose();
             conn.Close();
-            conn.Open();
-            cmd.CommandText = "SELECT count(*) from Resources where FolderID =@FolderID";
-            int count = int.Parse(Convert.ToString(cmd.ExecuteScalar()));
-            cmd.CommandText = "Update ResourceFolders set Counts = " + count.ToString() + " where ID = @ID";
-            cmd.Parameters.AddWithValue("@ID", FolderDDL.SelectedItem.Value);
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
+            //conn.Open();
+            //cmd.CommandText = "SELECT count(*) from Resources where FolderID =@FolderID";
+            //int count = int.Parse(Convert.ToString(cmd.ExecuteScalar()));
+            //cmd.CommandText = "Update ResourceFolders set Counts = " + count.ToString() + " where ID = @ID";
+            //cmd.Parameters.AddWithValue("@ID", FolderDDL.SelectedItem.Value);
+            //cmd.ExecuteNonQuery();
+            //cmd.Dispose();
         }
 
         if (i > 0)

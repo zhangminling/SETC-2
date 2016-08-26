@@ -17,6 +17,7 @@ public partial class File_DelTrue : System.Web.UI.Page
             {
                 IDSLabel.Text = Request.QueryString["IDS"].ToString();
                 MyInit();
+                MyDataBind();
             }
         }
     }
@@ -32,6 +33,20 @@ public partial class File_DelTrue : System.Web.UI.Page
             GridView1.DataBind();
             rd.Close();
             conn.Close();
+        }
+    }
+
+    private void MyDataBind()
+    {
+        using (SqlConnection conn = (SqlConnection)new DB().GetConnection())
+        {
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "select RandomID,ResourceName from Article_Resource where ResourceID in (" + IDSLabel.Text + ") order by ID desc";
+            conn.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+            Repeater1.DataSource = rd;
+            Repeater1.DataBind();
+            rd.Close();
         }
     }
 
@@ -60,10 +75,16 @@ public partial class File_DelTrue : System.Web.UI.Page
                 conn.Close();
             }
             {
-                sqlCon = "Delete from Resources where ID in (" + IDSLabel.Text + ")";
+                sqlCon = "Delete from Article_Resource where ResourceID in (" + IDSLabel.Text + ")";
                 cmd.CommandText = sqlCon;
                 conn.Open();
                 i = cmd.ExecuteNonQuery();
+                conn.Close();
+
+                sqlCon = "Delete from Resources where ID in (" + IDSLabel.Text + ")";
+                cmd.CommandText = sqlCon;
+                conn.Open();
+                cmd.ExecuteNonQuery();
                 cmd.Dispose();
                 conn.Close();
             }

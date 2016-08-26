@@ -16,13 +16,11 @@ public partial class ArticleTag_ArAdd : System.Web.UI.Page
     {
 
         if (!IsPostBack) {
-            MyInit();
-            MyDataBind();
+         
 
             if (Request.QueryString["ID"] != null) {
                 TagID.Text = Request.QueryString["ID"].ToString();
-
-                //string id = "";               
+             //string id = "";               
                 using (SqlConnection conn = new DB().GetConnection())
                 {
                     SqlCommand cmd = conn.CreateCommand();
@@ -36,19 +34,48 @@ public partial class ArticleTag_ArAdd : System.Web.UI.Page
                     rd.Close();
 
 
-                /*    SqlCommand cmd1 = conn.CreateCommand();
-                    cmd1.CommandText = "select * from [Articles_ArticleTags] where ArticleTagID= @TagID";
-                    string k="select count(*) from [Articles_ArticleTags] where ArticleTagID= @TagID";
-                    cmd1.Parameters.AddWithValue("@TagID", TagID.Text);
-                    SqlDataReader rd1 = cmd1.ExecuteReader();
-                    if (rd1.Read())
-                    {
-                        
-                       ArticleID.Text= rd1["ArticleID"].ToString();
+                 
+                    cmd.CommandText = "select count(*) as maxrow from [Articles_ArticleTags] where ArticleTagID= @TagID1";
+                    cmd.Parameters.AddWithValue("@TagID1", TagID.Text);
+                    SqlDataReader rd1 = cmd.ExecuteReader();
+                    if (rd1.Read()) { 
+                    Count.Text=rd1["maxrow"].ToString();
                     }
-                   // Label5.Text = k;
-                 */
+                    rd1.Close();
 
+                    string s = "";
+                    int i=Convert.ToInt32(Count.Text);
+                    string[] ArticleID = new string[i];
+                    cmd.CommandText = "select * from [Articles_ArticleTags] where ArticleTagID= @TagID2";
+                    cmd.Parameters.AddWithValue("@TagID2", TagID.Text);
+                    SqlDataReader rd2 = cmd.ExecuteReader();
+                    if (i != 0)
+                    {
+                        for (int j = 0; j < i; j++)
+                        {
+                            if (rd2.Read())
+                            {
+                                ArticleID[j] = rd2["ArticleID"].ToString();
+                                for (int k = 0; k < i; k++)
+                                {
+                                    s = string.Join(",", ArticleID);
+                                    ArticleIDS.Text = s;
+                                }
+                            }
+                        }
+                    }
+
+                    else {
+                        int s1 = 0;
+                        ArticleIDS.Text = s1.ToString(); }
+                    rd2.Close();
+
+                   
+                  
+                 
+
+                    MyInit();
+                    MyDataBind();
                 }
             }
 
@@ -132,7 +159,7 @@ public partial class ArticleTag_ArAdd : System.Web.UI.Page
             whereStr.Append(" and AuthorID = ").Append(AuthorDDL.SelectedValue);
         }
 
-        string sql = "select count(ID) as total from Articles " + whereStr.ToString();
+        string sql = "select count(ID) as total from Articles " + whereStr.ToString() + "and ID not in (" + ArticleIDS.Text + ")";
 
         using (SqlConnection conn = (SqlConnection)new DB().GetConnection())
         {
@@ -156,12 +183,12 @@ public partial class ArticleTag_ArAdd : System.Web.UI.Page
 
             if (AspNetPager1.CurrentPageIndex == 1)
             {
-                sql = "Select top " + AspNetPager1.PageSize + " * from Articles " + whereStr.ToString() + " " + OrderDDL.SelectedValue;
+                sql = "Select top " + AspNetPager1.PageSize + " * from Articles " + whereStr.ToString() + "and ID not in (" + ArticleIDS.Text + ") " + OrderDDL.SelectedValue;
             }
             else
             {
                 // Select Top 页容量 * from 表 where 条件 and id not in	(Select Top 页容量*（当前页数-1） id 	from 表 where 条件 order by 排序条件) order by 排序条件
-                sql = "Select top " + AspNetPager1.PageSize + " * from Articles " + whereStr.ToString() + " and id not in ( select top " + AspNetPager1.PageSize * (AspNetPager1.CurrentPageIndex - 1) + " id  from Articles " + whereStr.ToString() + " " + OrderDDL.SelectedValue + " ) " + OrderDDL.SelectedValue;
+                sql = "Select top " + AspNetPager1.PageSize + " * from Articles " + whereStr.ToString() + "and ID not in (" + ArticleIDS.Text + ")  and id not in ( select top " + AspNetPager1.PageSize * (AspNetPager1.CurrentPageIndex - 1) + " id  from Articles " + whereStr.ToString() + " " + OrderDDL.SelectedValue + " ) " + OrderDDL.SelectedValue;
                 //sql = "SELECT * FROM (SELECT ROW_NUMBER() OVER ( " + orderStr + ") AS MyRank,* FROM Article " + whereStr +" ) AS Rank " + whereStr + " and MyRank BETWEEN " +AspNetPager1.StartRecordIndex+" AND "+ (AspNetPager1.StartRecordIndex+AspNetPager1.PageSize-1) +orderStr;
             }
             //TestLabel.Text = sql;
@@ -242,68 +269,94 @@ public partial class ArticleTag_ArAdd : System.Web.UI.Page
                 ids += "," + GridView1.DataKeys[i].Value;
             }
         }
-        ids = ids.Substring(1);
-        Label3.Text = ids;
-        string[] array = ids.Split(',');
-        int k = array.Length;
-        string[] ArticleID = new string[10];
-        string[] ArticleName = new string[10];
-        string AtricleTagName = "";
-        string ArticleTagID = "";
-        // string[] USERID = new string[10];
-        //string[] USERNAME = new string[10];
-        //string USERTAGID = "";
-        // string USERTAGNAME = "";
-        int p;
-        using (SqlConnection conn = new DB().GetConnection())
+        if (!String.IsNullOrEmpty(ids))
         {
-            SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "select * from Articles where ID in (" + Label3.Text + ") order by ID desc  ";
-            conn.Open();
-            SqlDataReader rd = cmd.ExecuteReader();
-            for (p = 0; p <= k - 1; p++)
+            ids = ids.Substring(1);
+            Label3.Text = ids;
+            string[] array = ids.Split(',');
+            int k = array.Length;
+            string[] ArticleID = new string[10];
+            string[] ArticleName = new string[10];
+            string AtricleTagName = "";
+            string ArticleTagID = "";
+            // string[] USERID = new string[10];
+            //string[] USERNAME = new string[10];
+            //string USERTAGID = "";
+            // string USERTAGNAME = "";
+            int p;
+
+            string count = Count.Text;
+            using (SqlConnection conn = new DB().GetConnection())
             {
-                if (rd.Read())
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "select * from Articles where ID in (" + Label3.Text + ") order by ID desc  ";
+                conn.Open();
+                SqlDataReader rd = cmd.ExecuteReader();
+                for (p = 0; p <= k - 1; p++)
                 {
-                    ArticleID[p] = rd["ID"].ToString();
-                    ArticleName[p] = rd["Title"].ToString();
+                    if (rd.Read())
+                    {
+                        ArticleID[p] = rd["ID"].ToString();
+                        ArticleName[p] = rd["Title"].ToString();
 
+                    }
                 }
+                rd.Close();
+
+                Label3.Text = ArticleID[p];
+                cmd.CommandText = "select * from ArticleTags where ID =@ArticleTagID";
+                cmd.Parameters.AddWithValue("@ArticleTagID", TagID.Text);
+                SqlDataReader rd1 = cmd.ExecuteReader();
+
+                if (rd1.Read())
+                {
+                    ArticleTagID = rd1["ID"].ToString();
+                    AtricleTagName = rd1["TagName"].ToString();
+                    // Articles1 = rd1["Articles"].ToString();
+                }
+                rd1.Close();
+
+
+                int Articles = Convert.ToInt32(count);
+                Articles = Articles + k;
+                cmd.CommandText = "update ArticleTags set Articles= @Articles where ID=@ID";
+                cmd.Parameters.AddWithValue("@ID", TagID.Text);
+                cmd.Parameters.AddWithValue("@Articles", Articles);
+                cmd.ExecuteNonQuery();
+
+
+
+                //string[] Arrays = USERID.Split(',');
+                //string[] Arrays1 = USERNAME.Split(',');
+                for (int j = 0; j <= k - 1; j++)
+                {
+                    //USERID = Arrays[j];
+                    //USERNAME = Arrays1[j];
+                    StringBuilder sb = new StringBuilder("insert into Articles_ArticleTags(ArticleID,Title,ArticleTagID,ArticleTagName )");
+                    sb.Append(" values ( @ArticleID,@Title,@ArticleTagID,@ArticleTagName ) ");
+                    SqlCommand cmd1 = new SqlCommand(sb.ToString(), conn);
+                    cmd1.Parameters.AddWithValue("@ArticleID", ArticleID[j]);
+                    cmd1.Parameters.AddWithValue("@Title", ArticleName[j]);
+                    cmd1.Parameters.AddWithValue("@ArticleTagID", ArticleTagID);
+                    cmd1.Parameters.AddWithValue("@ArticleTagName", AtricleTagName);
+                    cmd1.ExecuteNonQuery();
+                    
+                    
+                } 
+                
+               
+                conn.Close();
+                Response.Write("<script language='javascript'> alert('操作成功');</script>");
+                Response.Redirect("ArticleTag_ArAdd.aspx?ID="+TagID.Text);
+              
+
             }
-            rd.Close();
-
-            Label3.Text = ArticleID[p];
-            cmd.CommandText = "select * from ArticleTags where ID =@ArticleTagID";
-            cmd.Parameters.AddWithValue("@ArticleTagID", TagID.Text);
-            SqlDataReader rd1 = cmd.ExecuteReader();
-            if (rd1.Read())
-            {
-                ArticleTagID = rd1["ID"].ToString();
-                AtricleTagName = rd1["TagName"].ToString();
-
-            }
-            rd1.Close();
-
-            //string[] Arrays = USERID.Split(',');
-            //string[] Arrays1 = USERNAME.Split(',');
-            for (int j = 0; j <= k - 1; j++)
-            {
-                //USERID = Arrays[j];
-                //USERNAME = Arrays1[j];
-                StringBuilder sb = new StringBuilder("insert into Articles_ArticleTags(ArticleID,Title,ArticleTagID,ArticleTagName )");
-                sb.Append(" values ( @ArticleID,@Title,@ArticleTagID,@ArticleTagName ) ");
-                SqlCommand cmd1 = new SqlCommand(sb.ToString(), conn);
-                cmd1.Parameters.AddWithValue("@ArticleID", ArticleID[j]);
-                cmd1.Parameters.AddWithValue("@Title", ArticleName[j]);
-                cmd1.Parameters.AddWithValue("@ArticleTagID", ArticleTagID);
-                cmd1.Parameters.AddWithValue("@ArticleTagName", AtricleTagName);
-                cmd1.ExecuteNonQuery();
-            }
-            conn.Close();
-            Response.Write("<script language='javascript'> alert('操作成功');</script>");
-
         }
-    }
-
+        else
+        {
+            Response.Write("<script language='javascript'> alert('请至少选择一项');</script>");
+        }
+        }
+    
 
 }

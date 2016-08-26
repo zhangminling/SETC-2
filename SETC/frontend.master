@@ -1,0 +1,479 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="frontend.master.cs" Inherits="frontend" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <!-- Meta Tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+	<meta content=always name=referrer>
+
+    <!-- Title -->
+    <title>教育技术与传播学院 —— 艺术与技术的融合，智慧与汗水的结晶</title>
+
+     <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+
+    <!-- Stylesheets -->
+    <link href="css2/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="css2/fontello.css" rel="stylesheet" type="text/css" />
+    <link href="css2/flexslider.css" rel="stylesheet" type="text/css" />
+    <link href="js2/revolution-slider/css/settings.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="css2/owl.carousel.css" rel="stylesheet" type="text/css" />
+    <link href="css2/responsive-calendar.css" rel="stylesheet" type="text/css" />
+    <link href="css2/chosen.css" rel="stylesheet" type="text/css" />
+    <link href="jackbox/css/jackbox.min.css" rel="stylesheet" type="text/css" />
+    <link href="css2/cloud-zoom.css" rel="stylesheet" type="text/css" />
+    <link href="css2/post.css" rel="stylesheet" type="text/css" />
+    <link href="css2/style.css" rel="stylesheet" type="text/css" />
+
+    <!--[if lt IE 9]>
+        <link href="css2/jackbox-ie8.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="css2/ie.css">
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<link href="css/jackbox-ie8.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="css/ie.css">
+    <![endif]-->
+
+    <!--[if lte IE 7]>
+        <script>
+            alert("为获得最佳效果，建议使用IE9、Chrome10或更高版本的浏览器。");
+        </script>
+    <![endif]-->
+
+    <!--[if gt IE 8]>
+        <link href="css2/jackbox-ie9.css" rel="stylesheet" type="text/css" />
+    <![endif]-->
+
+    <!--[if IE 7]>
+        <link rel="stylesheet" href="css2/fontello-ie7.css">
+    <![endif]-->
+
+    <style type="text/css">
+        .no-fouc {
+            display: none;
+        }
+    </style>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="js2/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js2/jquery-ui-1.10.4.min.js"></script>
+
+    <!-- Preloader -->
+    <script type="text/javascript" src="js2/jquery.queryloader2.min.js"></script>
+
+    <script type="text/javascript">
+        $('html').addClass('no-fouc');
+
+        $(document).ready(function () {
+
+            $('html').show();
+
+            var window_w = $(window).width();
+            var window_h = $(window).height();
+            var window_s = $(window).scrollTop();
+
+            $("body").queryLoader2({
+                backgroundColor: '#F9F6EF',
+                barColor: '#0097B3',
+                barHeight: 4,
+                percentage: false,
+                deepSearch: true,
+                minimumTime: 1000,
+                onComplete: function () {
+
+                    $('.animate-onscroll').filter(function (index) {
+
+                        return this.offsetTop < (window_s + window_h);
+
+                    }).each(function (index, value) {
+
+                        var el = $(this);
+                        var el_y = $(this).offset().top;
+
+                        if ((window_s) > el_y) {
+                            $(el).addClass('animated fadeInDown').removeClass('animate-onscroll');
+                            setTimeout(function () {
+                                $(el).css('opacity', '1').removeClass('animated fadeInDown');
+                            }, 2000);
+                        }
+
+                    });
+
+                }
+            });
+
+        });
+    </script>
+      <asp:ContentPlaceHolder id="head" runat="server">
+      </asp:ContentPlaceHolder>
+</head>
+<body class="sticky-header-on tablet-sticky-header">
+    <form id="form1" runat="server">
+        <!-- Container -->
+    <div class="container">
+
+        
+        <!-- Header -->
+        <header id="header" class="animate-onscroll">
+
+            <!-- Entry -->
+            <div id="Entry-header">
+                <div class="container">
+                    <div class="row">
+                        <div id="Entry">
+                            <%--<span>为获得最佳效果，请使用IE9、Chrome10或更高版本的浏览器。</span>--%>
+                            <span><a href="http://www.gdin.edu.cn" target="_blank">学校网站</a></span>|
+                            <span><a href="Login2.aspx">用户登录</a></span>|
+                            <span><a href="Register2.aspx">用户注册</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Header -->
+            <div id="main-header">
+
+                <div class="container">
+
+                    <div class="row">
+
+                        <!-- Logo -->
+                        <div id="logo" class="col-lg-2 col-md-2 col-sm-2" style="padding-top: 10px;">
+
+                            <a href="#"><img src="img/logo.png" alt="Logo" width="100"/></a>
+
+                        </div>
+                        <!-- /Logo -->
+                        <!-- Main Quote -->
+                        <div class="col-lg-7 col-md-7 col-sm-7"  style="padding-top: 10px;">
+
+                            <h2 style="margin:15px 0px 10px; ">教育技术与传播学院</h2>
+                            <h2 style="margin:0px 0px; ">教育技术中心</h2>
+
+                        </div>
+                        <!-- /Main Quote -->
+                        <!-- Newsletter -->
+                        <%--<div class="col-lg-3 col-md-3 col-sm-3">
+
+                            <div id="newsletter" action="#" method="POST">
+
+                                <div class="newsletter-form">
+
+                                    <div class="newsletter-email">
+                                        <input type="text" name="newsletter-email" placeholder="搜索..."/>
+                                    </div>
+
+                                    <div class="newsletter-submit" style="padding-left:25px;">
+                                        <input type="submit" value="" />
+                                        <i class="icons icon-right-thin"></i>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>--%>
+                        <!-- /Newsletter -->
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- /Main Header -->
+            <!-- Lower Header -->
+            <div id="lower-header">
+
+                <div class="container">
+
+                    <div id="menu-button">
+                        <div>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span>菜单</span>
+                    </div>
+
+                    <ul id="navigation">
+
+                        <!-- 主页 -->
+                        <li class="home-button current-menu-item">
+
+                            <a href="Index2.aspx"><i class="icons icon-home"></i></a>
+
+                        </li>
+                        <!-- /主页 -->
+                        <!-- 学院概况 -->
+                        <li>
+
+                            <span>学院概况</span>
+
+                            <ul>
+
+                                <li><a href="Article_List2.aspx?ID=1">学院简介</a> </li>
+                                <li><a href="Article_List2.aspx?ID=2">领导班子</a> </li>
+                                <li><a href="Article_List2.aspx?ID=3">机构设置</a> </li>
+                                <li><a href="Article_List2.aspx?ID=4">系和教研室</a></li>
+                                <li><a href="Article_List2.aspx?ID=50">教育技术中心</a></li>
+
+                            </ul>
+
+                        </li>
+                        <!-- /学院概况 -->
+                        <!-- 新闻通知 -->
+                        <li>
+
+                            <span>新闻通知</span>
+
+                            <ul>
+
+                                <li><a href="#">学院动态</a></li>
+                                <li><a href="#">教师通知</a></li>
+                                <li><a href="#">学生通知</a></li>
+
+                            </ul>
+
+                        </li>
+                        <!-- /新闻通知 -->
+                        <!-- 学生园地 -->
+                        <li>
+
+                            <span>学生园地</span>
+
+                            <ul>
+
+                                <li><a href="#">学生通知</a></li>
+                                <li><a href="#">活动剪影</a></li>
+                                <li><a href="#">周程安排</a></li>
+                                <li><a href="#">招聘信息</a></li>
+                                <li><a href="#">花名册</a></li>
+
+
+                            </ul>
+
+                        </li>
+                        <!-- /学生园地 -->
+                        <!-- 学科专业 -->
+                        <li>
+                            <span>学科专业</span>
+                            <ul>
+                                <li><a href="#">教育技术学</a></li>
+                                <li><a href="#">广播电视编导</a></li>
+                                <li><a href="#">数字媒体技术</a></li>
+                                <li><a href="#">网络与新媒体</a></li>
+                                <li><a href="#">专业设置</a></li>
+                                <li><a href="#">实验中心</a></li>
+                                <li><a href="#">实践基地</a></li>
+                            </ul>
+                        </li>
+                        <!-- /学科专业 -->
+                        <!-- 招生就业 -->
+                        <li>
+
+                            <span>招生就业</span>
+                            <ul>
+                                <li><a href="#">本科生招生</a></li>
+                                <li><a href="#">研究生招生</a></li>
+                                <li><a href="#">学生就业</a></li>
+                                <li><a href="#">招聘信息</a></li>
+                            </ul>
+
+                        </li>
+                        <!-- /招生就业 -->
+                        <!-- 师资队伍 -->
+                        <li>
+
+                            <span>师资队伍</span>
+                            <ul>
+                                <li><a href="#">师资力量</a></li>
+                                <li><a href="#">教师简介</a></li>
+                            </ul>
+
+                        </li>
+                        <!-- /师资队伍 -->
+                        <!-- 学生活动 -->
+                        <li>
+
+                            <span>学生活动</span>
+                            <ul>
+                                <li><a href="#">学生社团</a></li>
+                                <li><a href="#">广师视频</a></li>
+                                <li><a href="#">数媒协会</a></li>
+                                <li><a href="#">社会实践</a></li>
+                                <li><a href="#">活动剪影</a></li>
+                            </ul>
+
+                        </li>
+                        <!-- /学生活动 -->
+                        <!-- 作品展示 -->
+                        <li>
+
+                            <span>作品展示</span>
+
+                            <ul>
+
+                                <li><a href="#">影视作品</a></li>
+                                <li><a href="#">摄影作品</a></li>
+                                <li><a href="#">多媒体课件</a></li>
+                                <li><a href="#">平面设计</a></li>
+                                <li><a href="#">数字期刊</a></li>
+                                <li><a href="#">动漫游戏</a></li>
+                                <li><a href="#">网站设计</a></li>
+                                <li><a href="#">移动媒体</a></li>
+
+                            </ul>
+
+                        </li>
+                        <!-- /作品展示 -->
+                        <!-- 党团校友 -->
+                        <li>
+
+                            <span>党团校友</span>
+
+                            <ul>
+
+                                <li><a href="#">党建工作</a></li>
+                                <li><a href="#">团建工作</a></li>
+                                <li><a href="#">校友荣誉</a></li>
+                                <li><a href="#">校友通讯录</a></li>
+
+                            </ul>
+
+                        </li>
+                        <!-- /党团校友 -->
+                        <!-- 下载中心 -->
+                        <li>
+
+                            <span>下载中心</span>
+
+                            <ul>
+
+                                <li><a href="#">教师表格</a></li>
+                                <li><a href="#">学生表格</a></li>
+                                <li><a href="#">资源下载</a></li>
+
+                            </ul>
+
+                        </li>
+                        <!-- /下载中心 -->
+
+                    </ul>
+
+                </div>
+
+            </div>
+            <!-- /Lower Header -->
+
+
+        </header>
+        <!-- /Header -->
+
+
+<!-- 模板页 -->
+    <div>
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">        
+        </asp:ContentPlaceHolder>
+    </div>
+<!-- 模板页 -->
+
+<!-- 页脚 -->
+         <!-- Footer -->
+        <footer id="footer">
+
+            <!-- Lower Footer -->
+            <div id="lower-footer">
+
+                <div class="row">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 animate-onscroll">
+                        <div class="footer">
+                            <p>&nbsp;</p>
+                            <p>版权所有 2012-2014 <span style="font-size:14px; font-family:Verdana;">&copy;</span> <a href="http://www.gdin.edu.cn" target="_blank">广东技术师范学院</a> <a href="http://202.192.72.100">教育技术与传播学院</a> <a href="http://119.145.71.151">教育技术中心</a></p>
+                            <p>网站开通日期：2013-05-01 | 技术支持：Justin | 联系邮箱：21646523@QQ.com  | <a href="Article_List.aspx?c=网站故事">网站故事</a> </p>
+                            <p>
+                                <script type="text/javascript">	    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://"); document.write(unescape("%3Cspan id='cnzz_stat_icon_1252951388'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/stat.php%3Fid%3D1252951388%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+                            </p>
+                            <p style="padding-top:10px;">
+                                <script type="text/javascript">
+                                    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                                    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc31e5706e2277c8cef2338e2de57ffb3' type='text/javascript'%3E%3C/script%3E"));
+                                </script>
+                            </p>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <!-- /Lower Footer -->
+
+
+        </footer>
+        <!-- /Footer -->
+
+        <!-- Back To Top -->
+        <a href="#" id="button-to-top"><i class="icons icon-up-dir"></i></a>
+
+    </div>
+    <!-- /Container -->
+    <!-- JavaScript -->
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="js2/bootstrap.min.js"></script>
+
+    <!-- Modernizr -->
+    <script type="text/javascript" src="js2/modernizr.js"></script>
+
+    <!-- Sliders/Carousels -->
+    <script type="text/javascript" src="js2/jquery.flexslider-min.js"></script>
+    <script type="text/javascript" src="js2/owl.carousel.min.js"></script>
+
+    <!-- Revolution Slider  -->
+    <script type="text/javascript" src="js2/revolution-slider/js/jquery.themepunch.plugins.min.js"></script>
+    <script type="text/javascript" src="js2/revolution-slider/js/jquery.themepunch.revolution.min.js"></script>
+
+    <!-- Calendar -->
+    <script type="text/javascript" src="js2/responsive-calendar.min.js"></script>
+
+    <!-- Raty -->
+    <script type="text/javascript" src="js2/jquery.raty.min.js"></script>
+
+    <!-- Chosen -->
+    <script type="text/javascript" src="js2/chosen.jquery.min.js"></script>
+
+    <!-- jFlickrFeed -->
+    <script type="text/javascript" src="js2/jflickrfeed.min.js"></script>
+
+    <!-- InstaFeed -->
+    <script type="text/javascript" src="js2/instafeed.min.js"></script>
+
+    <!-- MixItUp -->
+    <script type="text/javascript" src="js2/jquery.mixitup.js"></script>
+
+    <!-- JackBox -->
+    <script type="text/javascript" src="jackbox/js/jackbox-packed.min.js"></script>
+
+    <!-- CloudZoom -->
+    <script type="text/javascript" src="js2/zoomsl-3.0.min.js"></script>
+
+    <!-- Main Script -->
+    <script type="text/javascript" src="js2/post.js"></script>
+
+    <!-- Main Script -->
+    <script type="text/javascript" src="js2/script.js"></script>
+
+
+    </form>
+</body>
+</html>

@@ -19,7 +19,7 @@
         
 
         editor.ui.addButton('Timestamp', {
-            label: '上传资源',
+            label: '插入资源',
             command: 'insertTimestamp',
             toolbar: 'insert'
         });

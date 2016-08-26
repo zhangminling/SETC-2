@@ -37,10 +37,10 @@ public partial class Login : System.Web.UI.Page
             else 
             {
                 if (roleID == 1){
-                    Util.ShowMessage("登录成功！", "User_Zoon.aspx");
+                    Util.ShowMessage("登录成功！", "User_Center.aspx");
                 }else
                 {
-                    Util.ShowMessage("登录成功！", "Show_Add.aspx");
+                    Util.ShowMessage("登录成功！", "User_Center.aspx");
                 }
             }
             
