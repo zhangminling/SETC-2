@@ -50,8 +50,12 @@
         <div class="row">
 
             <div class="col-lg-8 col-md-8 col-sm-8">
-
-                <h3 class="my-title animate-onscroll no-margin-top">最新要闻</h3>
+                <div class="media-filters animate-onscroll">
+                    <h3 class="my-title animate-onscroll no-margin-top">学院动态</h3>
+                    <div class="carousel-arrows animate-onscroll">
+                            <a href="Article_List2.aspx?ID=5" >更多>></a>
+                    </div>
+                </div>
                 <asp:Repeater ID="Repeater5" runat="server"> 
                 <ItemTemplate>
                 <!-- Blog Post -->
@@ -165,131 +169,219 @@
             </div>
             <!-- /Sidebar -->
 
-
-            <div class="col-lg-12 col-md-12 col-sm-12">
+            
+                </div>
+                
+                <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
 						
-						<!-- Media Filters -->
-						<div class="media-filters animate-onscroll">
+						    <!-- Media Filters -->
+						    <%--<div class="media-filters animate-onscroll">
 							
-								<h3 class="my-title">学院新闻</h3>
+								    <h3 class="my-title">学院新闻</h3>
 														
-						</div>
-						<!-- /Media Filters -->
+						    </div>--%>
+						    <!-- /Media Filters -->
 
-						<div class="media-items row">
+						    <div class="my-media-items row">
 							
-							<div class="col-lg-6 col-md-6 col-sm-12 mix category-photos" data-nameorder="1" data-dateorder="3">
+							    <%--<div class="col-lg-6 col-md-6 col-sm-12 mix category-photos" data-nameorder="1" data-dateorder="3">
 							
-																						<!-- Media Item -->
-							<div class="media-item animate-onscroll ">							
+																						    <!-- Media Item -->
+							    <div class="media-item animate-onscroll ">							
 																								
-								<div class="media-info">
+								    <div class="media-info">
 								
-									<div class="media-header">
+									    <div class="media-header">
 										
-										<div class="media-format">
-											<div>
-											<i class="icons icon-picture"></i>
-											</div>
-										</div>
+										    <div class="media-format">
+											    <div>
+											    <i class="icons icon-picture"></i>
+											    </div>
+										    </div>
 										
-										<div class="media-caption">
-											<h2><a href="portfolio-single-sidebar.html">学院动态</a></h2>
-										</div>
+										    <div class="media-caption">
+											    <h2><a href="portfolio-single-sidebar.html">学院动态</a></h2>
+										    </div>
 										
-									</div>
+									    </div>
 									
-									<div class="media-description"><div class="box">
-										<asp:GridView ID="GridView3" runat="server" AutoGenerateColumns="false" ShowHeader="false" Width="100%">
-                                        <columns>
-                                            <asp:templatefield headertext="序" headerstyle-horizontalalign="Center">
-                                                <itemtemplate>
-                                                    <asp:Label ID="lblNo" runat="server" Text='<%# Container.DataItemIndex+1 %>'></asp:Label>
-                                                </itemtemplate>
-                                                <itemstyle width="20px" horizontalalign="left" />
-                                            </asp:templatefield>
-                                            <asp:hyperlinkfield datanavigateurlfields="ID,Title"
-                                                                datanavigateurlformatstring="Article_View.aspx?ID={0}&T={1}" datatextfield="Title"
-                                                                headertext="标题" itemstyle-horizontalalign="Left">
-                                            </asp:hyperlinkfield>
-                                            <asp:boundfield datafield="CDT" headertext="创建日期" dataformatstring="{0:MM-dd}" itemstyle-width="25%" itemstyle-horizontalalign="Left" />
-                                        </columns>
-                                    </asp:GridView>
-									</div></div>
+									    <div class="media-description"><div class="box">
+										    <asp:GridView ID="GridView3" runat="server" AutoGenerateColumns="false" ShowHeader="false" Width="100%">
+                                            <columns>
+                                                <asp:templatefield headertext="序" headerstyle-horizontalalign="Center">
+                                                    <itemtemplate>
+                                                        <asp:Label ID="lblNo" runat="server" Text='<%# Container.DataItemIndex+1 %>'></asp:Label>
+                                                    </itemtemplate>
+                                                    <itemstyle width="20px" horizontalalign="left" />
+                                                </asp:templatefield>
+                                                <asp:hyperlinkfield datanavigateurlfields="ID,Title"
+                                                                    datanavigateurlformatstring="Article_View.aspx?ID={0}&T={1}" datatextfield="Title"
+                                                                    headertext="标题" itemstyle-horizontalalign="Left">
+                                                </asp:hyperlinkfield>
+                                                <asp:boundfield datafield="CDT" headertext="创建日期" dataformatstring="{0:MM-dd}" itemstyle-width="25%" itemstyle-horizontalalign="Left" />
+                                            </columns>
+                                        </asp:GridView>
+									    </div></div>
 									
-									<div class="media-button"  style="float:right;">
-										<a href="#">更多 >></a>
-									</div>
+									    <div class="media-button"  style="float:right;">
+										    <a href="#">更多 >></a>
+									    </div>
 								
-								</div>
-								
-																
-							</div>
-							<!-- /Media Item -->							
-							</div>
-							
-							<div class="col-lg-6 col-md-6 col-sm-12 mix category-videos category-meetings" data-nameorder="2" data-dateorder="1">
-							
-																						<!-- Media Item -->
-							<div class="media-item animate-onscroll ">															
-																
-								<div class="media-info">
-								
-									<div class="media-header">
-										
-										<div class="media-format">
-											<div>
-											<i class="icons icon-video"></i>
-											</div>
-										</div>
-										
-										<div class="media-caption">
-											<h2><a href="portfolio-single-sidebar.html">活动剪影</a></h2>
-										</div>
-										
-									</div>
-									
-									<div class="media-description"><div class="box">
-										<asp:GridView ID="GridView5" runat="server" AutoGenerateColumns="false" ShowHeader="false" Width="100%">
-                                        <columns>
-                                            <asp:templatefield headertext="序" headerstyle-horizontalalign="Center">
-                                                <itemtemplate>
-                                                    <asp:Label ID="lblNo" runat="server" Text='<%# Container.DataItemIndex+1 %>'></asp:Label>
-                                                </itemtemplate>
-                                                <itemstyle width="20px" horizontalalign="left" />
-                                            </asp:templatefield>
-                                            <asp:hyperlinkfield datanavigateurlfields="ID,Title"
-                                                                datanavigateurlformatstring="Article_View.aspx?ID={0}&T={1}" datatextfield="Title"
-                                                                headertext="标题" itemstyle-horizontalalign="Left">
-                                            </asp:hyperlinkfield>
-                                            <asp:boundfield datafield="CDT" headertext="创建日期" dataformatstring="{0:MM-dd}" itemstyle-width="25%" itemstyle-horizontalalign="Left" />
-                                        </columns>
-                                    </asp:GridView>
-									</div></div>
-									
-									<div class="media-button"  style="float:right;">
-										<a href="#">更多 >></a>
 								    </div>
 								
-								</div>
+																
+							    </div>
+							    <!-- /Media Item -->							
+							    </div>--%>
+							
+							    <%--<div class="col-lg-4 col-md-4 col-sm-12 mix category-videos category-meetings" data-nameorder="2" data-dateorder="1">
+							
+																						    <!-- Media Item -->
+							    <div class="media-item animate-onscroll ">															
+																
+								    <div class="media-info">
+								
+									    <div class="media-header">
+										
+										    <div class="media-format">
+											    <div>
+											    <i class="icons icon-video"></i>
+											    </div>
+										    </div>
+										
+										    <div class="media-caption">
+											    <h2><a href="portfolio-single-sidebar.html">活动剪影</a></h2>
+										    </div>
+										
+									    </div>
+									
+									    <div class="media-description"><div class="box">
+										    <asp:GridView ID="GridView5" runat="server" AutoGenerateColumns="false" ShowHeader="false" Width="100%">
+                                            <columns>
+                                                <asp:templatefield headertext="序" headerstyle-horizontalalign="Center">
+                                                    <itemtemplate>
+                                                        <asp:Label ID="lblNo" runat="server" Text='<%# Container.DataItemIndex+1 %>'></asp:Label>
+                                                    </itemtemplate>
+                                                    <itemstyle width="20px" horizontalalign="left" />
+                                                </asp:templatefield>
+                                                <asp:hyperlinkfield datanavigateurlfields="ID,Title"
+                                                                    datanavigateurlformatstring="Article_View.aspx?ID={0}&T={1}" datatextfield="Title"
+                                                                    headertext="标题" itemstyle-horizontalalign="Left">
+                                                </asp:hyperlinkfield>
+                                                <asp:boundfield datafield="CDT" headertext="创建日期" dataformatstring="{0:MM-dd}" itemstyle-width="25%" itemstyle-horizontalalign="Left" />
+                                            </columns>
+                                        </asp:GridView>
+									    </div></div>
+									
+									    <div class="media-button"  style="float:right;">
+										    <a href="#">更多 >></a>
+								        </div>
+								
+								    </div>
 								
 																
-							</div>
-							<!-- /Media Item -->							
-							</div>
+							    </div>
+							    <!-- /Media Item -->							
+							    </div>--%>
 
+                                <div class="col-lg-4 col-md-4 col-sm-12 animate-onscroll">
+						
+						    <h3 class="my-title1">活动剪影</h3>
+						
+												    <!-- Accordions -->
+						    <ul class="accordions">
+								
+                                <asp:Repeater ID="Repeater6" runat="server"> 
+                                <ItemTemplate>
+							    <!-- Accordion -->
+							    <li class="accordion">
+								
+								    <div class="accordion-header">
+									    <div class="accordion-icon"></div>
+									    <a><%# Eval("Title") %></a>
+									
+								    </div>
+								
+								    <div class="accordion-content">
+									    <p>Sed entum velit vel ipsum bibendum em lacus, itor et aliquam eget, iaculis id lacus. Praesent tudin. </p>
+								    </div>
+								
+							    </li>
+							    <!-- /Accordion -->
+							    </ItemTemplate>
+                                </asp:Repeater>
+							    
 							
-						</div>
+						    </ul>
+						    <!-- /Accordions -->						
+					    </div>
+
+                                <div class="col-lg-8 col-md-8 col-sm-12 col-lg-push-0 col-md-push-0 col-sm-push-0">
+												
+						            <!-- Banner Rotator -->
+						            <div class="banner-rotator animate-onscroll">
+							
+							            <div class="flexslider banner-rotator-flexslider">
+								
+								            <ul class="slides">
+									
+									            <li id="flex_rotator_1">
+										            <div class="banner-rotator-content">
+											            <h5>理科</h5>
+											            <h2>教育技术学</h2>
+											            <span class="date">（师范）</span>
+											            <a href="#" class="button big button-arrow">详细</a>
+										            </div>
+									            </li>
+									
+									            <li id="flex_rotator_2">
+										            <div class="banner-rotator-content">
+											            <h5>艺术类</h5>
+											            <h2>广播电视编导</h2>
+											            <span class="date">（非师范）</span>
+											            <a href="#" class="button big button-arrow">详细</a>
+										            </div>
+									            </li>
+									
+									            <li id="flex_rotator_3">
+										            <div class="banner-rotator-content">
+											            <h5>理科</h5>
+											            <h2>数字媒体技术</h2>
+											            <span class="date">（师范/非师范）</span>
+											            <a href="#" class="button big button-arrow">详细</a>
+										            </div>
+									            </li>
+
+                                                <li id="flex_rotator_4">
+										            <div class="banner-rotator-content">
+											            <h5>文理兼招</h5>
+											            <h2>网络与新媒体</h2>
+											            <span class="date">（非师范）</span>
+											            <a href="#" class="button big button-arrow">详细</a>
+										            </div>
+									            </li>
+									
+								            </ul>
+								
+							            </div>
+						
+						            </div>
+						            <!-- /Banner Rotator -->						
+						
+					            </div>
+							
+						    </div>
 						
 						
-					</div>
+					    </div>
+                    </div>    
 
                 </div>
-                </div>
 
 
 
-
+        <div class="my-bg">
         <div class="row no-margin-bottom">
 
 
@@ -306,7 +398,7 @@
                         <div class="carousel-arrows animate-onscroll">
                             <span class="left-arrow"><i class="icons icon-left-dir"></i></span>
                             <span class="right-arrow"><i class="icons icon-right-dir"></i></span>
-                            <a href="Article_List2.aspx?ID=6" >更多>></a>
+                            <a href="Show_List.aspx" >更多>></a>
                         </div>
 
                     </div>
@@ -322,7 +414,7 @@
                                 <div class="post-image">
                                     <img src="img/0391.jpg"" alt="">
                                 </div>
-
+                                <%--<div class="my-post">--%>
                                 <h4 class="post-title"><a href="blog-single-sidebar.html">《Web编程》课程期末作品（11师范） </a></h4>
 
                                 <div class="post-meta">
@@ -333,7 +425,7 @@
                                 <p>《Web编程》课程以网站设计作为期末考核作品，本次展示的优秀作品有《T-SZone教学空间》、《乐游旅游网》、《Doris珠宝网站》等</p>
 
                                 <a href="blog-single-sidebar.html" class="button read-more-button big button-arrow">详细</a>
-
+                               <%-- </div>--%>
                             </div>
                             <!-- /Blog Post -->
 
@@ -488,6 +580,7 @@
 
 
 
+        </div>
         </div>
 
         <%--<div class="wpn" id="project">--%>

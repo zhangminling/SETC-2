@@ -786,10 +786,10 @@ $(document).ready(function(){
 			
 			// Set First Accordion As Active
 			$(this).find('.accordion-content').hide();
-			if(!$(this).hasClass('toggles')){
-				$(this).find('.accordion:first-child').addClass('accordion-active');
-				$(this).find('.accordion:first-child .accordion-content').show();
-			}
+			//if(!$(this).hasClass('toggles')){
+			//	$(this).find('.accordion:first-child').addClass('accordion-active');
+			//	$(this).find('.accordion:first-child .accordion-content').show();
+			//}
 			
 			// Set Accordion Events
 			$(this).find('.accordion-header').click(function(){

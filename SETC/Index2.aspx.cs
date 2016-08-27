@@ -50,11 +50,11 @@ public partial class Index2 : System.Web.UI.Page
                 //rd.Close();
 
                 // GridView3 学院动态
-                cmd.CommandText = "select top 5 ID,Title,CDT from Articles where SubID = 5 and Status =1 and Finished = 1 Order by Orders Desc,CDT Desc,ID Desc";
-                rd = cmd.ExecuteReader();
-                GridView3.DataSource = rd;
-                GridView3.DataBind();
-                rd.Close();
+                //cmd.CommandText = "select top 5 ID,Title,CDT from Articles where SubID = 5 and Status =1 and Finished = 1 Order by Orders Desc,CDT Desc,ID Desc";
+                //rd = cmd.ExecuteReader();
+                //GridView3.DataSource = rd;
+                //GridView3.DataBind();
+                //rd.Close();
 
                 // GridView3 学院动态
                 cmd.CommandText = "select top 2 ID,Title,CDT from Articles where SubID = 5 and Status =1 and Finished = 1 Order by Orders Desc,CDT Desc,ID Desc";
@@ -78,10 +78,17 @@ public partial class Index2 : System.Web.UI.Page
                 //rd.Close();
 
                 // GridView5 活动剪影
-                cmd.CommandText = "select top 5 ID,Title,CDT from Articles where SubID = 39 and Status =1 and Finished = 1 Order by Orders Desc,CDT Desc,ID Desc";
+                //cmd.CommandText = "select top 5 ID,Title,CDT from Articles where SubID = 39 and Status =1 and Finished = 1 Order by Orders Desc,CDT Desc,ID Desc";
+                //rd = cmd.ExecuteReader();
+                //GridView5.DataSource = rd;
+                //GridView5.DataBind();
+                //rd.Close();
+
+                // GridView5 活动剪影
+                cmd.CommandText = "select top 4 ID,Title,CDT from Articles where SubID = 39 and Status =1 and Finished = 1 Order by Orders Desc,CDT Desc,ID Desc";
                 rd = cmd.ExecuteReader();
-                GridView5.DataSource = rd;
-                GridView5.DataBind();
+                Repeater6.DataSource = rd;
+                Repeater6.DataBind();
                 rd.Close();
 
                 conn.Close();
